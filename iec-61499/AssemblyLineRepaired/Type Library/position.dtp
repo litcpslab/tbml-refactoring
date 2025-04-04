@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataType Name="position">
+	<VersionInfo Version="1.0" Author="AK123700" Date="2025-03-22">
+	</VersionInfo>
+	<StructuredType>
+		<VarDeclaration Name="X" Type="UINT" Comment="Output event qualifier"/>
+		<VarDeclaration Name="Y" Type="UINT"/>
+		<VarDeclaration Name="Z" Type="UINT"/>
+	</StructuredType>
+</DataType>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SubAppType Name="MechatronicArm" Comment="Subapplication Type">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK123700" Date="2025-03-21">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<SubAppInterfaceList>
+		<SubAppEventInputs>
+			<SubAppEvent Name="REQ" Type="Event" Comment="Normal Execution Request">
+			</SubAppEvent>
+		</SubAppEventInputs>
+		<SubAppEventOutputs>
+			<SubAppEvent Name="CNF" Type="Event" Comment="Execution Confirmation">
+			</SubAppEvent>
+		</SubAppEventOutputs>
+		<InputVars>
+			<VarDeclaration Name="X" Type="UINT"/>
+			<VarDeclaration Name="Y" Type="UINT"/>
+			<VarDeclaration Name="Z" Type="UINT"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="X_OUT" Type="UINT"/>
+			<VarDeclaration Name="Y_OUT" Type="UINT"/>
+			<VarDeclaration Name="Z_OUT" Type="UINT"/>
+		</OutputVars>
+	</SubAppInterfaceList>
+	<SubAppNetwork>
+		<SubApp Name="SubApp" x="100" y="-300">
+			<SubAppInterfaceList>
+				<SubAppEventInputs>
+					<SubAppEvent Name="REQ" Type="Event">
+					</SubAppEvent>
+				</SubAppEventInputs>
+				<SubAppEventOutputs>
+					<SubAppEvent Name="CNF" Type="Event">
+					</SubAppEvent>
+				</SubAppEventOutputs>
+				<InputVars>
+					<VarDeclaration Name="X" Type="UINT"/>
+					<VarDeclaration Name="Z" Type="UINT"/>
+					<VarDeclaration Name="Y" Type="UINT"/>
+				</InputVars>
+				<OutputVars>
+					<VarDeclaration Name="OUT" Type="UINT"/>
+					<VarDeclaration Name="OUT_1" Type="UINT"/>
+					<VarDeclaration Name="OUT_2" Type="UINT"/>
+				</OutputVars>
+			</SubAppInterfaceList>
+			<SubAppNetwork>
+				<FB Name="UINT2UINT" Type="UINT2UINT" x="1200" y="0">
+				</FB>
+				<FB Name="UINT2UINT_2" Type="UINT2UINT" x="200" y="1600">
+				</FB>
+				<FB Name="UINT2UINT_1" Type="UINT2UINT" x="700" y="900">
+				</FB>
+				<EventConnections>
+					<Connection Source="REQ" Destination="UINT2UINT.REQ" dx1="1255"/>
+					<Connection Source="UINT2UINT.CNF" Destination="CNF" dx1="2030"/>
+					<Connection Source="REQ" Destination="UINT2UINT_2.REQ" dx1="60" dx2="60" dy="385"/>
+					<Connection Source="REQ" Destination="UINT2UINT_1.REQ" dx1="660"/>
+				</EventConnections>
+				<DataConnections>
+					<Connection Source="X" Destination="UINT2UINT.IN" dx1="1255"/>
+					<Connection Source="UINT2UINT.OUT" Destination="OUT" dx1="2030"/>
+					<Connection Source="Z" Destination="UINT2UINT_2.IN" dx1="60" dx2="60" dy="385"/>
+					<Connection Source="UINT2UINT_2.OUT" Destination="OUT_1" dx1="2545"/>
+					<Connection Source="Y" Destination="UINT2UINT_1.IN"/>
+					<Connection Source="UINT2UINT_1.OUT" Destination="OUT_2"/>
+				</DataConnections>
+			</SubAppNetwork>
+			<Attribute Name="Unfolded" Value="true"/>
+			<Attribute Name="width" Type="LREAL" Value="2515"/>
+			<Attribute Name="height" Type="LREAL" Value="2685"/>
+		</SubApp>
+		<EventConnections>
+			<Connection Source="REQ" Destination="SubApp.REQ" dx1="1050"/>
+			<Connection Source="SubApp.CNF" Destination="CNF" dx1="1515"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="X" Destination="SubApp.X" dx1="1050"/>
+			<Connection Source="SubApp.OUT" Destination="X_OUT" dx1="1515"/>
+			<Connection Source="Z" Destination="SubApp.Z" dx1="1050"/>
+			<Connection Source="SubApp.OUT_1" Destination="Z_OUT" dx1="875"/>
+			<Connection Source="Y" Destination="SubApp.Y" dx1="1050"/>
+			<Connection Source="SubApp.OUT_2" Destination="Y_OUT" dx1="1515"/>
+		</DataConnections>
+	</SubAppNetwork>
+</SubAppType>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="AssemblyLine">
+	<VersionInfo Version="1.0" Author="AK123700" Date="2025-03-21">
+	</VersionInfo>
+	<Application Name="AssemblyLineApp">
+		<SubAppNetwork>
+			<FB Name="E_CYCLE" Type="E_CYCLE" x="-2700" y="2800">
+				<Parameter Name="DT" Value="T#200ms"/>
+			</FB>
+			<FB Name="CSV_WRITER_2" Type="CSV_WRITER_2" x="7300" y="-1500">
+				<Parameter Name="QI" Value="True"/>
+				<Parameter Name="FILE_NAME" Value="'C:\Users\AK123700\runtime-org.eclipse.fordiac.ide.product\AssemblyLine\traces\arm_x.csv'"/>
+			</FB>
+			<FB Name="CountTime" Type="E_CTU" x="4400" y="-100">
+			</FB>
+			<FB Name="E_CTU" Type="E_CTU" x="-3200" y="3600">
+				<Parameter Name="PV" Value="50"/>
+			</FB>
+			<FB Name="INIT" Type="BOOL2BOOL" x="-3300" y="2100">
+			</FB>
+			<FB Name="E_SWITCH_1" Type="E_SWITCH" x="-1900" y="3800">
+			</FB>
+			<SubApp Name="PositionSensor" Type="PositionSensor" x="0" y="2900">
+			</SubApp>
+			<SubApp Name="MechatronicArm" Type="MechatronicArm" x="1400" y="2900">
+			</SubApp>
+			<SubApp Name="QualityCamera" Type="QualityCamera" x="2700" y="3700">
+			</SubApp>
+			<SubApp Name="PositionSensor_1" Type="PositionSensor" x="0" y="3600">
+			</SubApp>
+			<SubApp Name="MechatronicArm_1" Type="MechatronicArm" x="1400" y="3500">
+			</SubApp>
+			<FB Name="CSV_WRITER_3" Type="CSV_WRITER_2" x="7100" y="-500">
+				<Parameter Name="QI" Value="True"/>
+				<Parameter Name="FILE_NAME" Value="'C:\Users\AK123700\runtime-org.eclipse.fordiac.ide.product\AssemblyLine\traces\arm_y.csv'"/>
+			</FB>
+			<FB Name="CSV_WRITER_4" Type="CSV_WRITER_2" x="7300" y="500">
+				<Parameter Name="QI" Value="True"/>
+				<Parameter Name="FILE_NAME" Value="'C:\Users\AK123700\runtime-org.eclipse.fordiac.ide.product\AssemblyLine\traces\arm_z.csv'"/>
+			</FB>
+			<FB Name="CSV_WRITER_5" Type="CSV_WRITER_2" x="7400" y="1700">
+				<Parameter Name="QI" Value="True"/>
+				<Parameter Name="FILE_NAME" Value="'C:\Users\AK123700\runtime-org.eclipse.fordiac.ide.product\AssemblyLine\traces\arm1_x.csv'"/>
+			</FB>
+			<FB Name="CSV_WRITER_6" Type="CSV_WRITER_2" x="7200" y="2900">
+				<Parameter Name="QI" Value="True"/>
+				<Parameter Name="FILE_NAME" Value="'C:\Users\AK123700\runtime-org.eclipse.fordiac.ide.product\AssemblyLine\traces\arm1_y.csv'"/>
+			</FB>
+			<FB Name="CSV_WRITER_7" Type="CSV_WRITER_2" x="7200" y="4200">
+				<Parameter Name="QI" Value="True"/>
+				<Parameter Name="FILE_NAME" Value="'C:\Users\AK123700\runtime-org.eclipse.fordiac.ide.product\AssemblyLine\traces\arm1_z.csv'"/>
+			</FB>
+			<FB Name="CountTime_1" Type="E_CTU" x="4400" y="2900">
+			</FB>
+			<FB Name="CountTime_2" Type="E_CTU" x="4000" y="5200">
+			</FB>
+			<FB Name="CSV_WRITER_8" Type="CSV_WRITER_2" x="7230" y="5465">
+				<Parameter Name="QI" Value="True"/>
+				<Parameter Name="FILE_NAME" Value="'C:\Users\AK123700\runtime-org.eclipse.fordiac.ide.product\AssemblyLine\traces\camera_x.csv'"/>
+			</FB>
+			<FB Name="CSV_WRITER_9" Type="CSV_WRITER_2" x="7200" y="6700">
+				<Parameter Name="QI" Value="True"/>
+				<Parameter Name="FILE_NAME" Value="'C:\Users\AK123700\runtime-org.eclipse.fordiac.ide.product\AssemblyLine\traces\camery_y.csv'"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="E_CTU.RO" Destination="E_CYCLE.STOP" dx1="50" dx2="45" dy="-350"/>
+				<Connection Source="INIT.CNF" Destination="E_CYCLE.START" dx1="50" dx2="45" dy="465"/>
+				<Connection Source="INIT.CNF" Destination="CSV_WRITER_2.INIT" dx1="4840">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="E_CTU.CUO" Destination="E_SWITCH_1.EI" dx1="420"/>
+				<Connection Source="E_SWITCH_1.EO1" Destination="E_CTU.R" dx1="50" dx2="70" dy="-450"/>
+				<Connection Source="E_CYCLE.EO" Destination="PositionSensor.REQ" dx1="1085"/>
+				<Connection Source="PositionSensor.CNF" Destination="MechatronicArm.REQ"/>
+				<Connection Source="MechatronicArm.CNF" Destination="CountTime.CU" dx1="1050">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="MechatronicArm.CNF" Destination="CSV_WRITER_2.REQ" dx1="2525">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="PositionSensor_1.CNF" Destination="MechatronicArm_1.REQ" dx1="275"/>
+				<Connection Source="PositionSensor_1.CNF" Destination="QualityCamera.REQ" dx1="295" dx2="295" dy="400"/>
+				<Connection Source="E_CYCLE.EO" Destination="PositionSensor_1.REQ" dx1="1085"/>
+				<Connection Source="INIT.CNF" Destination="CSV_WRITER_3.INIT" dx1="4840">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="MechatronicArm.CNF" Destination="CSV_WRITER_3.REQ" dx1="2425">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="MechatronicArm.CNF" Destination="CSV_WRITER_4.REQ" dx1="1050">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="INIT.CNF" Destination="CSV_WRITER_4.INIT" dx1="5830">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="E_CYCLE.EO" Destination="E_CTU.CU" dx1="50" dx2="45" dy="575"/>
+				<Connection Source="INIT.CNF" Destination="CSV_WRITER_5.INIT" dx1="4840">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="INIT.CNF" Destination="CSV_WRITER_7.INIT" dx1="5740">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="INIT.CNF" Destination="CSV_WRITER_6.INIT" dx1="4840">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="INIT.CNF" Destination="CSV_WRITER_8.INIT" dx1="4840">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="INIT.CNF" Destination="CSV_WRITER_9.INIT" dx1="4840">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="MechatronicArm_1.CNF" Destination="CountTime_1.CU" dx1="80">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="QualityCamera.CNF" Destination="CountTime_2.CU" dx1="390">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="MechatronicArm_1.CNF" Destination="CSV_WRITER_5.REQ" dx1="80">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="MechatronicArm_1.CNF" Destination="CSV_WRITER_6.REQ" dx1="2575">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="MechatronicArm_1.CNF" Destination="CSV_WRITER_7.REQ" dx1="70">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="QualityCamera.CNF" Destination="CSV_WRITER_8.REQ" dx1="2655">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="QualityCamera.CNF" Destination="CSV_WRITER_9.REQ" dx1="2655">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="CountTime.CV" Destination="CSV_WRITER_2.SD_1" dx1="1230"/>
+				<Connection Source="E_CTU.Q" Destination="E_SWITCH_1.G" dx1="420"/>
+				<Connection Source="MechatronicArm.X_OUT" Destination="CSV_WRITER_2.SD_2" dx1="2525">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="PositionSensor.X" Destination="MechatronicArm.X"/>
+				<Connection Source="PositionSensor.Y" Destination="MechatronicArm.Y"/>
+				<Connection Source="PositionSensor.Z" Destination="MechatronicArm.Z"/>
+				<Connection Source="PositionSensor_1.X" Destination="MechatronicArm_1.X" dx1="275"/>
+				<Connection Source="PositionSensor_1.Y" Destination="MechatronicArm_1.Y" dx1="275"/>
+				<Connection Source="PositionSensor_1.Z" Destination="MechatronicArm_1.Z" dx1="275"/>
+				<Connection Source="PositionSensor_1.X" Destination="QualityCamera.X" dx1="270" dx2="270" dy="250"/>
+				<Connection Source="PositionSensor_1.Y" Destination="QualityCamera.Y" dx1="245" dx2="245" dy="185"/>
+				<Connection Source="CountTime.CV" Destination="CSV_WRITER_3.SD_1" dx1="1120"/>
+				<Connection Source="MechatronicArm.Y_OUT" Destination="CSV_WRITER_3.SD_2" dx1="1100" dx2="1100" dy="-1585">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="MechatronicArm.Z_OUT" Destination="CSV_WRITER_4.SD_2" dx1="1075">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="CountTime.CV" Destination="CSV_WRITER_4.SD_1" dx1="1220"/>
+				<Connection Source="CountTime_1.CV" Destination="CSV_WRITER_6.SD_1" dx1="1140"/>
+				<Connection Source="CountTime_1.CV" Destination="CSV_WRITER_7.SD_1" dx1="1140"/>
+				<Connection Source="CountTime_1.CV" Destination="CSV_WRITER_5.SD_1" dx1="1140"/>
+				<Connection Source="CountTime_2.CV" Destination="CSV_WRITER_8.SD_1" dx1="1345"/>
+				<Connection Source="CountTime_2.CV" Destination="CSV_WRITER_9.SD_1" dx1="1345"/>
+				<Connection Source="MechatronicArm_1.X_OUT" Destination="CSV_WRITER_5.SD_2" dx1="75">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="MechatronicArm_1.Y_OUT" Destination="CSV_WRITER_6.SD_2" dx1="85">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="MechatronicArm_1.Z_OUT" Destination="CSV_WRITER_7.SD_2" dx1="60">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="QualityCamera.X_OUT" Destination="CSV_WRITER_8.SD_2" dx1="2680">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="QualityCamera.Y_OUT" Destination="CSV_WRITER_9.SD_2" dx1="2605">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="1255" y="1190">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Mapping From="AssemblyLineApp.E_CYCLE" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.CSV_WRITER_2" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.CountTime" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.E_CTU" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.INIT" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.E_SWITCH_1" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.PositionSensor" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.MechatronicArm" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.PositionSensor_1" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.MechatronicArm_1" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.QualityCamera" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.CSV_WRITER_3" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.CSV_WRITER_4" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.CountTime_2" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.CSV_WRITER_8" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.CountTime_1" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.CSV_WRITER_9" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.CSV_WRITER_7" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.CSV_WRITER_6" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="AssemblyLineApp.CSV_WRITER_5" To="FORTE_PC.EMB_RES"/>
+</System>

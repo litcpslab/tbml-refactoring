@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SubAppType Name="QualityCamera" Comment="Subapplication Type">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK123700" Date="2025-03-21">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<SubAppInterfaceList>
+		<SubAppEventInputs>
+			<SubAppEvent Name="REQ" Type="Event" Comment="Normal Execution Request">
+			</SubAppEvent>
+		</SubAppEventInputs>
+		<SubAppEventOutputs>
+			<SubAppEvent Name="CNF" Type="Event" Comment="Execution Confirmation">
+			</SubAppEvent>
+		</SubAppEventOutputs>
+		<InputVars>
+			<VarDeclaration Name="X" Type="UINT" Comment="Input event qualifier"/>
+			<VarDeclaration Name="Y" Type="UINT"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="X_OUT" Type="UINT" Comment="Output event qualifier"/>
+			<VarDeclaration Name="Y_OUT" Type="UINT"/>
+		</OutputVars>
+	</SubAppInterfaceList>
+	<SubAppNetwork>
+		<FB Name="UINT2UINT" Type="UINT2UINT" x="300" y="200">
+		</FB>
+		<FB Name="UINT2UINT_1" Type="UINT2UINT" x="300" y="700">
+		</FB>
+		<EventConnections>
+			<Connection Source="REQ" Destination="UINT2UINT.REQ" dx1="1055"/>
+			<Connection Source="REQ" Destination="UINT2UINT_1.REQ" dx1="1055"/>
+			<Connection Source="UINT2UINT.CNF" Destination="CNF" dx1="1395"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="X" Destination="UINT2UINT.IN" dx1="1055"/>
+			<Connection Source="Y" Destination="UINT2UINT_1.IN" dx1="1055"/>
+			<Connection Source="UINT2UINT_1.OUT" Destination="Y_OUT" dx1="1395"/>
+			<Connection Source="UINT2UINT.OUT" Destination="X_OUT" dx1="1395"/>
+		</DataConnections>
+	</SubAppNetwork>
+</SubAppType>

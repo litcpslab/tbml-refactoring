@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SubAppType Name="PositionSensor" Comment="Subapplication Type">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK123700" Date="2025-03-21">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<SubAppInterfaceList>
+		<SubAppEventInputs>
+			<SubAppEvent Name="REQ" Type="Event" Comment="Normal Execution Request">
+			</SubAppEvent>
+		</SubAppEventInputs>
+		<SubAppEventOutputs>
+			<SubAppEvent Name="CNF" Type="Event" Comment="Execution Confirmation">
+			</SubAppEvent>
+		</SubAppEventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="pos" Type="position"/>
+		</OutputVars>
+	</SubAppInterfaceList>
+	<SubAppNetwork>
+		<SubApp Name="Counter_X" x="900" y="-700">
+			<SubAppInterfaceList>
+				<SubAppEventInputs>
+					<SubAppEvent Name="REQ" Type="Event">
+					</SubAppEvent>
+				</SubAppEventInputs>
+				<SubAppEventOutputs>
+					<SubAppEvent Name="CUO" Type="Event">
+					</SubAppEvent>
+				</SubAppEventOutputs>
+				<OutputVars>
+					<VarDeclaration Name="CV" Type="UINT"/>
+				</OutputVars>
+			</SubAppInterfaceList>
+			<SubAppNetwork>
+				<FB Name="E_SWITCH" Type="E_SWITCH" x="0" y="0">
+				</FB>
+				<FB Name="CountValue" Type="E_CTU" x="1010" y="0">
+					<Parameter Name="PV" Value="7"/>
+				</FB>
+				<EventConnections>
+					<Connection Source="E_SWITCH.EO0" Destination="CountValue.CU"/>
+					<Connection Source="E_SWITCH.EO1" Destination="CountValue.R"/>
+					<Connection Source="REQ" Destination="E_SWITCH.EI" dx1="60" dx2="60" dy="-115"/>
+					<Connection Source="CountValue.CUO" Destination="CUO" dx1="2170"/>
+					<Connection Source="CountValue.RO" Destination="CUO" dx1="1170"/>
+				</EventConnections>
+				<DataConnections>
+					<Connection Source="CountValue.Q" Destination="E_SWITCH.G" dx1="55" dx2="50" dy="280"/>
+					<Connection Source="CountValue.CV" Destination="CV" dx1="2170"/>
+				</DataConnections>
+			</SubAppNetwork>
+			<Attribute Name="width" Type="LREAL" Value="200"/>
+			<Attribute Name="height" Type="LREAL" Value="100"/>
+		</SubApp>
+		<SubApp Name="Counter_Y" x="800" y="-100">
+			<SubAppInterfaceList>
+				<SubAppEventInputs>
+					<SubAppEvent Name="REQ" Type="Event">
+					</SubAppEvent>
+				</SubAppEventInputs>
+				<OutputVars>
+					<VarDeclaration Name="CV" Type="UINT"/>
+				</OutputVars>
+			</SubAppInterfaceList>
+			<SubAppNetwork>
+				<FB Name="CountValue_1" Type="E_CTU" x="1010" y="0">
+					<Parameter Name="PV" Value="8"/>
+				</FB>
+				<FB Name="E_SWITCH_1" Type="E_SWITCH" x="0" y="0">
+				</FB>
+				<EventConnections>
+					<Connection Source="E_SWITCH_1.EO0" Destination="CountValue_1.CU"/>
+					<Connection Source="E_SWITCH_1.EO1" Destination="CountValue_1.R"/>
+					<Connection Source="REQ" Destination="E_SWITCH_1.EI"/>
+				</EventConnections>
+				<DataConnections>
+					<Connection Source="CountValue_1.Q" Destination="E_SWITCH_1.G" dx1="55" dx2="185" dy="-450"/>
+					<Connection Source="CountValue_1.CV" Destination="CV"/>
+				</DataConnections>
+			</SubAppNetwork>
+			<Attribute Name="width" Type="LREAL" Value="200"/>
+			<Attribute Name="height" Type="LREAL" Value="100"/>
+		</SubApp>
+		<SubApp Name="Counter_Z" x="900" y="400">
+			<SubAppInterfaceList>
+				<SubAppEventInputs>
+					<SubAppEvent Name="REQ" Type="Event">
+					</SubAppEvent>
+				</SubAppEventInputs>
+				<OutputVars>
+					<VarDeclaration Name="CV" Type="UINT"/>
+				</OutputVars>
+			</SubAppInterfaceList>
+			<SubAppNetwork>
+				<FB Name="CountValue_2" Type="E_CTU" x="1010" y="0">
+					<Parameter Name="PV" Value="9"/>
+				</FB>
+				<FB Name="E_SWITCH_2" Type="E_SWITCH" x="0" y="0">
+				</FB>
+				<EventConnections>
+					<Connection Source="E_SWITCH_2.EO0" Destination="CountValue_2.CU"/>
+					<Connection Source="E_SWITCH_2.EO1" Destination="CountValue_2.R"/>
+					<Connection Source="REQ" Destination="E_SWITCH_2.EI"/>
+				</EventConnections>
+				<DataConnections>
+					<Connection Source="CountValue_2.Q" Destination="E_SWITCH_2.G" dx1="55" dx2="100" dy="-450"/>
+					<Connection Source="CountValue_2.CV" Destination="CV"/>
+				</DataConnections>
+			</SubAppNetwork>
+			<Attribute Name="width" Type="LREAL" Value="200"/>
+			<Attribute Name="height" Type="LREAL" Value="100"/>
+		</SubApp>
+		<FB Name="STRUCT_MUX" Type="STRUCT_MUX" x="2400" y="-300">
+			<Attribute Name="StructuredType" Type="STRING" Value="position"/>
+		</FB>
+		<EventConnections>
+			<Connection Source="REQ" Destination="Counter_X.REQ" dx1="565">
+				<Attribute Name="Visible" Value="false"/>
+			</Connection>
+			<Connection Source="REQ" Destination="Counter_Y.REQ" dx1="345">
+				<Attribute Name="Visible" Value="false"/>
+			</Connection>
+			<Connection Source="REQ" Destination="Counter_Z.REQ" dx1="105">
+				<Attribute Name="Visible" Value="false"/>
+			</Connection>
+			<Connection Source="Counter_X.CUO" Destination="STRUCT_MUX.REQ" dx1="1055"/>
+			<Connection Source="STRUCT_MUX.CNF" Destination="CNF" dx1="365"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="STRUCT_MUX.OUT" Destination="pos" dx1="675"/>
+			<Connection Source="Counter_X.CV" Destination="STRUCT_MUX.X" dx1="1055"/>
+			<Connection Source="Counter_Y.CV" Destination="STRUCT_MUX.Y"/>
+			<Connection Source="Counter_Z.CV" Destination="STRUCT_MUX.Z" dx1="1140"/>
+		</DataConnections>
+	</SubAppNetwork>
+</SubAppType>
