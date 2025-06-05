@@ -39,6 +39,8 @@ https://github.com/user-attachments/assets/ec499dc8-76b7-4dec-a55b-b749a7c06233
 * SafeDeletion of FunctionBlockType
 * Rename Member of Structured Data Type
 * Update InitialValue of Structured Data Type
-
+* Replace Pin with Structured Type
+* Create new Hierchacical element from existing network
+* remove Hierachy Level
 
 
