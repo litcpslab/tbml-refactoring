@@ -1,4 +1,6 @@
-# Refactoring iec-61499/CappingStationLarge
+# Refactoring 
+
+The section shows the application in project iec-61499/CappingStationLarge
 
 ## Merge Connection Refactoring with Conflict Resolution
 
