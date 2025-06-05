@@ -10,6 +10,8 @@ The initial application was scaled up from 91 block instances to 28483 to demons
 | Refactoring without conflict resolution | 42881                 | 25979                     | 4382 (Instances of SkillConfig) + 15337 (Instances of SkillFB)                     |            3422            |                           | ~6.04 sec                                                                   | 9390                  |
 
 
+
+**Please turn on sound for explanation**
 ## Merge Connection Refactoring with Conflict Resolution
 
 https://github.com/user-attachments/assets/a1892f40-a638-4ccb-b441-58c322936588
@@ -19,4 +21,14 @@ https://github.com/user-attachments/assets/a1892f40-a638-4ccb-b441-58c322936588
 https://github.com/user-attachments/assets/555d0991-91a9-4e32-a120-bbbd0d2ff387
 
 # Additional Refactoring Operations implemented in Eclipse 4diac
+
+
+
+
+
+## Safe Deletion of a DataType
+
+
+
+https://github.com/user-attachments/assets/ec499dc8-76b7-4dec-a55b-b749a7c06233
 
