@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Template for an empty basic function block" Name="MotorCtrl">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="az" Date="2018-07-17" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="" Name="sensorUpdate" Type="Event">
+        <With Var="motorRunning"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="" Name="updateActuators" Type="Event">
+        <With Var="motorOn"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="" Name="motorRunning" Type="BOOL"/>
+      <VarDeclaration Comment="time till the motor has either start moving or stopped moving after the according command was given" Name="changeTimeOut" Type="TIME"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="" Name="motorOn" Type="BOOL"/>
+    </OutputVars>
+    <Plugs>
+      <AdapterDeclaration Comment="" Name="timer" Type="ARTimeOut"/>
+    </Plugs>
+    <Sockets>
+      <AdapterDeclaration Comment="" Name="cmd" Type="AMotor"/>
+    </Sockets>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="" Name="turnOn" x="2395.0" y="415.0">
+        <ECAction Algorithm="startMotor" Output="updateActuators"/>
+        <ECAction Algorithm="setTimeOut" Output="timer.START"/>
+      </ECState>
+      <ECState Comment="" Name="running" x="2390.0" y="1120.0">
+        <ECAction Output="cmd.done"/>
+      </ECState>
+      <ECState Comment="" Name="turnOff" x="2400.0" y="1700.0">
+        <ECAction Algorithm="stopMotor" Output="updateActuators"/>
+        <ECAction Algorithm="setTimeOut" Output="timer.START"/>
+      </ECState>
+      <ECState Comment="" Name="stopped" x="2380.0" y="2270.0">
+        <ECAction Output="cmd.done"/>
+      </ECState>
+      <ECState Comment="" Name="error" x="4155.0" y="1360.0">
+        <ECAction Output="cmd.error"/>
+      </ECState>
+      <ECTransition Comment="" Condition="cmd.turnOn" Destination="turnOn" Source="START" x="1555.0" y="495.0"/>
+      <ECTransition Comment="" Condition="[TRUE = motorRunning]" Destination="running" Source="turnOn" x="2535.0" y="830.0"/>
+      <ECTransition Comment="" Condition="cmd.turnOff" Destination="turnOff" Source="running" x="2550.0" y="1420.0"/>
+      <ECTransition Comment="" Condition="[FALSE = motorRunning]" Destination="stopped" Source="turnOff" x="2570.0" y="2040.0"/>
+      <ECTransition Comment="" Condition="cmd.turnOn" Destination="turnOn" Source="stopped" x="1145.0" y="1430.0"/>
+      <ECTransition Comment="" Condition="timer.TimeOut" Destination="error" Source="turnOn" x="3445.0" y="960.0"/>
+      <ECTransition Comment="" Condition="timer.TimeOut" Destination="error" Source="turnOff" x="3455.0" y="1405.0"/>
+      <ECTransition Comment="" Condition="cmd.turnOn" Destination="turnOn" Source="error" x="4440.0" y="-80.0"/>
+      <ECTransition Comment="" Condition="cmd.turnOff" Destination="stopped" Source="error" x="3930.0" y="2815.0"/>
+    </ECC>
+    <Algorithm Comment="new algorithm" Name="startMotor">
+      <ST Text="motorOn := TRUE;"/>
+    </Algorithm>
+    <Algorithm Comment="new algorithm" Name="stopMotor">
+      <ST Text="motorOn := FALSE;"/>
+    </Algorithm>
+    <Algorithm Comment="new algorithm" Name="setTimeOut">
+      <ST Text="timer.DT := changeTimeOut;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

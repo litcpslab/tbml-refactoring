@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Template for an empty basic function block" Name="BlockerCtrl">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="az" Date="2018-09-13" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="" Name="updSensors" Type="Event">
+        <With Var="inSensor"/>
+        <With Var="outSensor"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs/>
+    <InputVars>
+      <VarDeclaration Comment="" Name="inSensor" Type="BOOL"/>
+      <VarDeclaration Comment="" Name="outSensor" Type="BOOL"/>
+    </InputVars>
+    <OutputVars/>
+    <Plugs>
+      <AdapterDeclaration Comment="" Name="blockerCyl" Type="ACylinder"/>
+    </Plugs>
+    <Sockets>
+      <AdapterDeclaration Comment="" Name="cmd" Type="ABlocker"/>
+    </Sockets>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="510.0"/>
+      <ECState Comment="" Name="WaitForFree" x="1765.0" y="525.0"/>
+      <ECState Comment="" Name="Block" x="3060.0" y="525.0">
+        <ECAction Output="blockerCyl.work"/>
+      </ECState>
+      <ECState Comment="" Name="Blocked" x="4230.0" y="625.0"/>
+      <ECState Comment="" Name="PaletteArrived" x="4300.0" y="200.0">
+        <ECAction Output="cmd.palletteWaiting"/>
+      </ECState>
+      <ECState Comment="" Name="WaitForPalette" x="4200.0" y="1200.0"/>
+      <ECState Comment="" Name="PaletteWaiting" x="4245.0" y="1510.0">
+        <ECAction Output="blockerCyl.reset"/>
+      </ECState>
+      <ECState Comment="" Name="PalettePassed" x="2800.0" y="1200.0">
+        <ECAction Output="cmd.pallettePassed"/>
+      </ECState>
+      <ECState Comment="" Name="unblock" x="1145.0" y="1060.0">
+        <ECAction Output="blockerCyl.reset"/>
+      </ECState>
+      <ECTransition Comment="" Condition="cmd.block" Destination="WaitForFree" Source="START" x="1290.0" y="605.0"/>
+      <ECTransition Comment="" Condition="[false = outSensor]" Destination="Block" Source="WaitForFree" x="2590.0" y="590.0"/>
+      <ECTransition Comment="" Condition="blockerCyl.done" Destination="Blocked" Source="Block" x="3730.0" y="255.0"/>
+      <ECTransition Comment="" Condition="[true = inSensor]" Destination="PaletteArrived" Source="Blocked" x="4215.0" y="465.0"/>
+      <ECTransition Comment="" Condition="1" Destination="Blocked" Source="PaletteArrived" x="4770.0" y="480.0"/>
+      <ECTransition Comment="" Condition="cmd.letPassSingle" Destination="WaitForPalette" Source="Blocked" x="4425.0" y="980.0"/>
+      <ECTransition Comment="" Condition="[true = inSensor]" Destination="PaletteWaiting" Source="WaitForPalette" x="4515.0" y="1415.0"/>
+      <ECTransition Comment="" Condition="[false = outSensor]" Destination="PalettePassed" Source="PaletteWaiting" x="3690.0" y="1605.0"/>
+      <ECTransition Comment="" Condition="1" Destination="Block" Source="PalettePassed" x="3115.0" y="955.0"/>
+      <ECTransition Comment="" Condition="cmd.letPass" Destination="unblock" Source="Blocked" x="2760.0" y="875.0"/>
+      <ECTransition Comment="" Condition="blockerCyl.done" Destination="START" Source="unblock" x="915.0" y="870.0"/>
+    </ECC>
+  </BasicFB>
+</FBType>

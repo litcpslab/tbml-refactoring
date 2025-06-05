@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="HWFB" Comment="Composite FB wrapping other FBs">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK120569" Date="2021-03-18">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialization Request">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="pubAdr" Type="WSTRING" Comment=""/>
+			<VarDeclaration Name="subAdr" Type="WSTRING" Comment=""/>
+		</InputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="SkillReq" Type="SUBSCRIBE_1" Comment="" x="-300.0" y="1200.0">
+		</FB>
+		<FB Name="SensHome" Type="IX" Comment="" x="-900.0" y="5515.0">
+		</FB>
+		<FB Name="SensWork" Type="IX" Comment="" x="-900.0" y="4000.0">
+		</FB>
+		<FB Name="arrivedHome" Type="E_F_TRIG" Comment="" x="200.0" y="5815.0">
+		</FB>
+		<FB Name="arrivedWork" Type="E_R_TRIG" Comment="" x="200.0" y="4200.0">
+		</FB>
+		<FB Name="DDB_EH_TimeOut_1" Type="DDB_EH_TimeOutComplete" Comment="" x="4600.0" y="5285.0">
+			<Parameter Name="errorMsg" Value="'arrivedHome'"/>
+		</FB>
+		<FB Name="DDB_EH_TimeOut" Type="DDB_EH_TimeOutComplete" Comment="" x="3900.0" y="3400.0">
+			<Parameter Name="errorMsg" Value="'arrivedWork'"/>
+		</FB>
+		<FB Name="QX" Type="QX" Comment="" x="5300.0" y="1300.0">
+		</FB>
+		<FB Name="QX_1" Type="QX" Comment="" x="5300.0" y="2000.0">
+		</FB>
+		<FB Name="DDB_EH_TimeOut_2" Type="DDB_EH_TimeOutComplete" Comment="" x="2400.0" y="3400.0">
+			<Parameter Name="errorMsg" Value="'leftWork'"/>
+		</FB>
+		<FB Name="leftWork" Type="E_F_TRIG" Comment="" x="200.0" y="3600.0">
+		</FB>
+		<FB Name="DDB_EH_TimeOut_3" Type="DDB_EH_TimeOutComplete" Comment="" x="4600.0" y="4285.0">
+			<Parameter Name="errorMsg" Value="'leftHome'"/>
+		</FB>
+		<FB Name="leftHome" Type="E_F_TRIG" Comment="" x="200.0" y="5000.0">
+		</FB>
+		<FB Name="E_SR" Type="E_SR" Comment="" x="4600.0" y="1400.0">
+		</FB>
+		<FB Name="E_SR_1" Type="E_SR" Comment="" x="4600.0" y="2000.0">
+		</FB>
+		<FB Name="PUBLISH_1" Type="PUBLISH_1" Comment="" x="3300.0" y="500.0">
+		</FB>
+		<FB Name="mergeMsg" Type="mergeMsg" Comment="" x="6200.0" y="3500.0">
+		</FB>
+		<FB Name="HWMsg" Type="HWMsg" Comment="" x="1200.0" y="1300.0">
+		</FB>
+		<EventConnections>
+			<Connection Source="SensHome.IND" Destination="arrivedHome.EI" Comment="" dx1="300.0" dx2="300.0" dy="0.0"/>
+			<Connection Source="SensWork.IND" Destination="arrivedWork.EI" Comment=""/>
+			<Connection Source="arrivedHome.EO" Destination="DDB_EH_TimeOut_1.E2" Comment="" dx1="115.0" dx2="115.0" dy="0.0"/>
+			<Connection Source="arrivedWork.EO" Destination="DDB_EH_TimeOut.E2" Comment="" dx1="1660.0" dx2="1660.0" dy="0.0"/>
+			<Connection Source="SensWork.IND" Destination="leftWork.EI" Comment="" dx1="475.0" dx2="475.0" dy="0.0"/>
+			<Connection Source="leftWork.EO" Destination="DDB_EH_TimeOut_2.E2" Comment="" dx1="115.0" dx2="115.0" dy="0.0"/>
+			<Connection Source="SensHome.IND" Destination="leftHome.EI" Comment="" dx1="300.0" dx2="300.0" dy="0.0"/>
+			<Connection Source="leftHome.EO" Destination="DDB_EH_TimeOut_3.E2" Comment="" dx1="100.0" dx2="100.0" dy="0.0"/>
+			<Connection Source="E_SR.EO" Destination="QX.REQ" Comment="" dx1="145.0" dx2="145.0" dy="0.0"/>
+			<Connection Source="E_SR_1.EO" Destination="QX_1.REQ" Comment="" dx1="145.0" dx2="145.0" dy="0.0"/>
+			<Connection Source="DDB_EH_TimeOut_2.ERROR" Destination="mergeMsg.EI1" Comment="" dx1="1330.0" dx2="1330.0" dy="0.0"/>
+			<Connection Source="DDB_EH_TimeOut.ERROR" Destination="mergeMsg.EI2" Comment="" dx1="540.0" dx2="540.0" dy="0.0"/>
+			<Connection Source="DDB_EH_TimeOut_3.ERROR" Destination="mergeMsg.EI3" Comment="" dx1="190.0" dx2="190.0" dy="0.0"/>
+			<Connection Source="DDB_EH_TimeOut_1.ERROR" Destination="mergeMsg.EI4" Comment="" dx1="190.0" dx2="190.0" dy="0.0"/>
+			<Connection Source="INIT" Destination="PUBLISH_1.INIT" Comment="" dx1="3150.0"/>
+			<Connection Source="INIT" Destination="SkillReq.INIT" Comment="" dx1="1350.0"/>
+			<Connection Source="DDB_EH_TimeOut_2.INITO" Destination="DDB_EH_TimeOut.INIT" Comment=""/>
+			<Connection Source="DDB_EH_TimeOut.INITO" Destination="DDB_EH_TimeOut_3.INIT" Comment="" dx1="60.0" dx2="60.0" dy="445.0"/>
+			<Connection Source="DDB_EH_TimeOut_3.INITO" Destination="DDB_EH_TimeOut_1.INIT" Comment="" dx1="60.0" dx2="60.0" dy="500.0"/>
+			<Connection Source="SkillReq.IND" Destination="HWMsg.EI1" Comment="" dx1="285.0" dx2="285.0" dy="0.0"/>
+			<Connection Source="arrivedHome.EO" Destination="HWMsg.arrivedHome" Comment="" dx1="200.0" dx2="200.0" dy="0.0"/>
+			<Connection Source="arrivedWork.EO" Destination="HWMsg.arrivedWork" Comment="" dx1="200.0" dx2="200.0" dy="0.0"/>
+			<Connection Source="mergeMsg.EO1" Destination="HWMsg.Error" Comment="" dx1="60.0" dx2="60.0" dy="-950.0"/>
+			<Connection Source="HWMsg.EO1" Destination="PUBLISH_1.REQ" Comment="" dx1="185.0" dx2="185.0" dy="0.0"/>
+			<Connection Source="HWMsg.gotoHome" Destination="DDB_EH_TimeOut_1.E1" Comment="" dx1="2210.0" dx2="2210.0" dy="0.0"/>
+			<Connection Source="HWMsg.gotoHome" Destination="DDB_EH_TimeOut_2.E1" Comment="" dx1="145.0" dx2="145.0" dy="0.0"/>
+			<Connection Source="HWMsg.gotoHome" Destination="E_SR.S" Comment="" dx1="550.0" dx2="550.0" dy="0.0"/>
+			<Connection Source="HWMsg.gotoHome" Destination="E_SR_1.R" Comment="" dx1="550.0" dx2="550.0" dy="0.0"/>
+			<Connection Source="HWMsg.gotoWork" Destination="DDB_EH_TimeOut.E1" Comment="" dx1="1560.0" dx2="1560.0" dy="0.0"/>
+			<Connection Source="HWMsg.gotoWork" Destination="DDB_EH_TimeOut_3.E1" Comment="" dx1="2215.0" dx2="2215.0" dy="0.0"/>
+			<Connection Source="HWMsg.gotoWork" Destination="E_SR.R" Comment="" dx1="550.0" dx2="550.0" dy="0.0"/>
+			<Connection Source="HWMsg.gotoWork" Destination="E_SR_1.S" Comment="" dx1="820.0" dx2="820.0" dy="0.0"/>
+			<Connection Source="INIT" Destination="HWMsg.INIT" Comment="" dx1="2100.0"/>
+			<Connection Source="HWMsg.INITO" Destination="DDB_EH_TimeOut_2.INIT" Comment="" dx1="145.0" dx2="985.0" dy="0.0"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="SensHome.IN" Destination="arrivedHome.QI" Comment=""/>
+			<Connection Source="SensWork.IN" Destination="arrivedWork.QI" Comment="" dx1="300.0" dx2="300.0" dy="0.0"/>
+			<Connection Source="SensWork.IN" Destination="leftWork.QI" Comment="" dx1="300.0" dx2="300.0" dy="0.0"/>
+			<Connection Source="SensHome.IN" Destination="leftHome.QI" Comment="" dx1="430.0" dx2="430.0" dy="0.0"/>
+			<Connection Source="E_SR.Q" Destination="QX.OUT" Comment="" dx1="145.0" dx2="145.0" dy="0.0"/>
+			<Connection Source="E_SR_1.Q" Destination="QX_1.OUT" Comment="" dx1="145.0" dx2="145.0" dy="0.0"/>
+			<Connection Source="DDB_EH_TimeOut_2.oerrorMsg" Destination="mergeMsg.msg1" Comment="" dx1="1290.0" dx2="1290.0" dy="0.0"/>
+			<Connection Source="DDB_EH_TimeOut.oerrorMsg" Destination="mergeMsg.msg2" Comment="" dx1="540.0" dx2="540.0" dy="0.0"/>
+			<Connection Source="DDB_EH_TimeOut_3.oerrorMsg" Destination="mergeMsg.msg3" Comment="" dx1="190.0" dx2="190.0" dy="0.0"/>
+			<Connection Source="DDB_EH_TimeOut_1.oerrorMsg" Destination="mergeMsg.msg4" Comment="" dx1="190.0" dx2="190.0" dy="0.0"/>
+			<Connection Source="pubAdr" Destination="PUBLISH_1.ID" Comment="" dx1="3150.0"/>
+			<Connection Source="subAdr" Destination="SkillReq.ID" Comment="" dx1="1350.0"/>
+			<Connection Source="SkillReq.RD_1" Destination="HWMsg.msg" Comment="" dx1="285.0" dx2="285.0" dy="0.0"/>
+			<Connection Source="mergeMsg.msg" Destination="HWMsg.errorMsg" Comment="" dx1="60.0" dx2="60.0" dy="-1050.0"/>
+			<Connection Source="HWMsg.omsg" Destination="PUBLISH_1.SD_1" Comment="" dx1="360.0" dx2="360.0" dy="0.0"/>
+		</DataConnections>
+	</FBNetwork>
+</FBType>

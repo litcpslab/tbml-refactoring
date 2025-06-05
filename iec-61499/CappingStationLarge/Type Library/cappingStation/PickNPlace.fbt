@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Template for an empty basic function block" Name="PickNPlace">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="az" Date="2018-09-13" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs/>
+    <EventOutputs/>
+    <InputVars/>
+    <OutputVars/>
+    <Plugs>
+      <AdapterDeclaration Comment="" Name="gripper" Type="AGripper"/>
+      <AdapterDeclaration Comment="" Name="horCylinder" Type="ACylinder"/>
+      <AdapterDeclaration Comment="" Name="verCylinder" Type="ACylinder"/>
+    </Plugs>
+    <Sockets>
+      <AdapterDeclaration Comment="" Name="cmd" Type="APickNPlace"/>
+    </Sockets>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="" Name="OpenGripper" x="1600.0" y="300.0">
+        <ECAction Output="gripper.reset"/>
+      </ECState>
+      <ECState Comment="" Name="resetVer" x="1710.0" y="730.0">
+        <ECAction Output="verCylinder.reset"/>
+      </ECState>
+      <ECState Comment="" Name="resetHor" x="1680.0" y="1140.0">
+        <ECAction Output="horCylinder.reset"/>
+      </ECState>
+      <ECState Comment="" Name="Home" x="1815.0" y="1530.0">
+        <ECAction Output="cmd.done"/>
+      </ECState>
+      <ECState Comment="" Name="WaitForGripp" x="1700.0" y="2000.0"/>
+      <ECState Comment="" Name="Gripp" x="3600.0" y="300.0">
+        <ECAction Output="gripper.grip"/>
+      </ECState>
+      <ECState Comment="" Name="WaitForProcess" x="3600.0" y="780.0">
+        <ECAction Output="cmd.done"/>
+      </ECState>
+      <ECState Comment="" Name="MoveLeft" x="3600.0" y="1240.0">
+        <ECAction Output="horCylinder.work"/>
+      </ECState>
+      <ECState Comment="" Name="MoveDown" x="3600.0" y="1720.0">
+        <ECAction Output="verCylinder.work"/>
+      </ECState>
+      <ECState Comment="" Name="Open" x="3600.0" y="2100.0">
+        <ECAction Output="gripper.release"/>
+      </ECState>
+      <ECState Comment="" Name="MoveUp" x="3600.0" y="2400.0">
+        <ECAction Output="verCylinder.home"/>
+      </ECState>
+      <ECState Comment="" Name="MoveRight" x="3600.0" y="2720.0">
+        <ECAction Output="cmd.workPosFree"/>
+        <ECAction Output="horCylinder.home"/>
+      </ECState>
+      <ECState Comment="" Name="Done" x="2375.0" y="3045.0">
+        <ECAction Output="cmd.done"/>
+      </ECState>
+      <ECTransition Comment="" Condition="cmd.reset" Destination="OpenGripper" Source="START" x="1190.0" y="435.0"/>
+      <ECTransition Comment="" Condition="gripper.reseted" Destination="resetVer" Source="OpenGripper" x="1800.0" y="600.0"/>
+      <ECTransition Comment="" Condition="verCylinder.reseted" Destination="resetHor" Source="resetVer" x="1810.0" y="1015.0"/>
+      <ECTransition Comment="" Condition="horCylinder.reseted" Destination="Home" Source="resetHor" x="1865.0" y="1415.0"/>
+      <ECTransition Comment="" Condition="1" Destination="WaitForGripp" Source="Home" x="1935.0" y="1825.0"/>
+      <ECTransition Comment="" Condition="1" Destination="WaitForGripp" Source="Done" x="2150.0" y="2580.0"/>
+      <ECTransition Comment="" Condition="cmd.gripp" Destination="Gripp" Source="WaitForGripp" x="2830.0" y="1755.0"/>
+      <ECTransition Comment="" Condition="gripper.done" Destination="WaitForProcess" Source="Gripp" x="3745.0" y="560.0"/>
+      <ECTransition Comment="" Condition="cmd.insert" Destination="MoveLeft" Source="WaitForProcess" x="3760.0" y="1040.0"/>
+      <ECTransition Comment="" Condition="horCylinder.done" Destination="MoveDown" Source="MoveLeft" x="3755.0" y="1540.0"/>
+      <ECTransition Comment="" Condition="verCylinder.done" Destination="Open" Source="MoveDown" x="3760.0" y="1965.0"/>
+      <ECTransition Comment="" Condition="gripper.done" Destination="MoveUp" Source="Open" x="3755.0" y="2350.0"/>
+      <ECTransition Comment="" Condition="verCylinder.done" Destination="MoveRight" Source="MoveUp" x="3825.0" y="2650.0"/>
+      <ECTransition Comment="" Condition="horCylinder.done" Destination="Done" Source="MoveRight" x="3135.0" y="2960.0"/>
+    </ECC>
+  </BasicFB>
+</FBType>

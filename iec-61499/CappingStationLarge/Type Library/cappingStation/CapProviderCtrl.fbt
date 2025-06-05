@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Template for an empty basic function block" Name="CapProviderCtrl">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="az" Date="2018-07-17" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="" Name="updPartSen" Type="Event">
+        <With Var="partReady"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs/>
+    <InputVars>
+      <VarDeclaration Comment="" Name="partReady" Type="BOOL"/>
+      <VarDeclaration Comment="" Name="partWaitTime" Type="TIME"/>
+    </InputVars>
+    <OutputVars/>
+    <Plugs>
+      <AdapterDeclaration Comment="" Name="motor" Type="AMotor"/>
+      <AdapterDeclaration Comment="" Name="timer" Type="ARTimeOut"/>
+    </Plugs>
+    <Sockets>
+      <AdapterDeclaration Comment="" Name="cmd" Type="ACapProvider"/>
+      <AdapterDeclaration Comment="" Name="depletionAlarm" Type="Alarm"/>
+    </Sockets>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="" Name="error" x="975.0" y="1145.0">
+        <ECAction Output="cmd.error"/>
+      </ECState>
+      <ECState Comment="" Name="startMotorWaitForPart" x="1880.0" y="370.0">
+        <ECAction Output="motor.turnOn"/>
+        <ECAction Algorithm="setTimer" Output="timer.START"/>
+      </ECState>
+      <ECState Comment="" Name="PartInPosition" x="2400.0" y="1600.0">
+        <ECAction Output="motor.turnOff"/>
+        <ECAction Output="cmd.capReady"/>
+      </ECState>
+      <ECState Comment="" Name="depleted" x="4455.0" y="400.0">
+        <ECAction Output="depletionAlarm.raise"/>
+      </ECState>
+      <ECTransition Comment="" Condition="cmd.reqNewCap" Destination="startMotorWaitForPart" Source="START" x="1375.0" y="440.0"/>
+      <ECTransition Comment="" Condition="motor.error" Destination="error" Source="startMotorWaitForPart" x="1865.0" y="910.0"/>
+      <ECTransition Comment="" Condition="cmd.reqNewCap" Destination="startMotorWaitForPart" Source="error" x="1220.0" y="760.0"/>
+      <ECTransition Comment="" Condition="timer.TimeOut" Destination="depleted" Source="startMotorWaitForPart" x="3315.0" y="980.0"/>
+      <ECTransition Comment="" Condition="depletionAlarm.ack" Destination="startMotorWaitForPart" Source="depleted" x="3410.0" y="125.0"/>
+      <ECTransition Comment="" Condition="[TRUE = partReady]" Destination="PartInPosition" Source="startMotorWaitForPart" x="2365.0" y="1055.0"/>
+      <ECTransition Comment="" Condition="motor.error" Destination="error" Source="PartInPosition" x="1780.0" y="1430.0"/>
+      <ECTransition Comment="" Condition="cmd.reqNewCap" Destination="startMotorWaitForPart" Source="PartInPosition" x="3475.0" y="1065.0"/>
+    </ECC>
+    <Algorithm Comment="new algorithm" Name="setTimer">
+      <ST Text="timer.DT := partWaitTime;&#10;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

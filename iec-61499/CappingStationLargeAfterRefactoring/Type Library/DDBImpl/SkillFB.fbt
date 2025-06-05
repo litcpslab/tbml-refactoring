@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="SkillFB" Comment="Composite FB wrapping other FBs">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK120569" Date="2021-03-18">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialization Request">
+				<With Var="msgI"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+			</Event>
+			<Event Name="Error" Type="Event">
+				<With Var="omsg"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="msgI" Type="message"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="omsg" Type="STRING"/>
+		</OutputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="HWReq" Type="PUBLISH_1" x="1270" y="310">
+			<Parameter Name="QI" Value="1"/>
+		</FB>
+		<FB Name="HWResp" Type="SUBSCRIBE_1" x="-2380" y="-365">
+			<Parameter Name="QI" Value="1"/>
+		</FB>
+		<FB Name="HWCommTimeOut" Type="DDB_EH_TimeOutComplete" x="1100" y="-1400">
+			<Parameter Name="errorMsg" Value="'HWTimeOut'"/>
+		</FB>
+		<FB Name="SkillMessage" Type="SkillMessage" x="-885" y="-365">
+		</FB>
+		<FB Name="F_STRING_TO_WSTRING" Type="F_STRING_TO_WSTRING" x="-3630" y="790">
+		</FB>
+		<FB Name="F_STRING_TO_WSTRING_1" Type="F_STRING_TO_WSTRING" x="-225" y="1475">
+		</FB>
+		<EventConnections>
+			<Connection Source="INIT" Destination="HWReq.INIT" dx1="1210" dx2="750" dy="190"/>
+			<Connection Source="HWCommTimeOut.ERROR" Destination="Error" dx1="240"/>
+			<Connection Source="HWResp.IND" Destination="HWCommTimeOut.E2" dx1="1385"/>
+			<Connection Source="HWResp.INITO" Destination="HWCommTimeOut.INIT" dx1="1385"/>
+			<Connection Source="REQ" Destination="SkillMessage.REQ" dx1="1010" dx2="230" dy="370"/>
+			<Connection Source="HWResp.IND" Destination="SkillMessage.HWResp" dx1="340"/>
+			<Connection Source="SkillMessage.Error" Destination="Error" dx1="2865"/>
+			<Connection Source="SkillMessage.ReqHW" Destination="HWCommTimeOut.E1" dx1="440"/>
+			<Connection Source="SkillMessage.CONF" Destination="CNF" dx1="640" dx2="1005" dy="60"/>
+			<Connection Source="INIT" Destination="F_STRING_TO_WSTRING.REQ" dx1="1210"/>
+			<Connection Source="F_STRING_TO_WSTRING.CNF" Destination="HWResp.INIT" dx1="155"/>
+			<Connection Source="SkillMessage.ReqHW" Destination="F_STRING_TO_WSTRING_1.REQ" dx1="60" dx2="60" dy="790"/>
+			<Connection Source="F_STRING_TO_WSTRING_1.CNF" Destination="HWReq.REQ" dx1="275"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="HWResp.RD_1" Destination="SkillMessage.HWMsg" dx1="140"/>
+			<Connection Source="SkillMessage.ohwmsg" Destination="HWReq.SD_1" dx1="140"/>
+			<Connection Source="SkillMessage.omsg" Destination="omsg" dx1="640" dx2="805" dy="-230"/>
+			<Connection Source="F_STRING_TO_WSTRING.OUT" Destination="HWResp.ID" dx1="155"/>
+			<Connection Source="F_STRING_TO_WSTRING_1.OUT" Destination="HWReq.ID" dx1="275"/>
+		</DataConnections>
+	</FBNetwork>
+</FBType>

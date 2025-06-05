@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SubAppType Name="AbstTwoStateCtrl" Comment="Subapplication Type">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK120569" Date="2020-07-27">
+	</VersionInfo>
+	<SubAppInterfaceList>
+		<SubAppEventInputs>
+			<SubAppEvent Name="INIT" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="gotoHome" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="gotoWork" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="ErrorDetected" Type="Event" Comment="">
+			</SubAppEvent>
+		</SubAppEventInputs>
+		<SubAppEventOutputs>
+			<SubAppEvent Name="INITO" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="LeftHome" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="LeftWork" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="ArrivedHome" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="ArrivedWork" Type="Event" Comment="">
+			</SubAppEvent>
+		</SubAppEventOutputs>
+	</SubAppInterfaceList>
+	<SubAppNetwork>
+		<SubApp Name="Cyl_HW_2Sensors" Type="HW_2Sensors" Comment="" x="2525.0" y="1105.0">
+		</SubApp>
+		<FB Name="S_Cyl" Type="TwoStateCtrl" Comment="" x="1240.0" y="705.0">
+		</FB>
+		<FB Name="ArrivedHome" Type="E_R_TRIG" Comment="" x="3730.0" y="505.0">
+		</FB>
+		<FB Name="LeftHome" Type="E_F_TRIG" Comment="" x="3735.0" y="1205.0">
+		</FB>
+		<FB Name="ArrivedWork" Type="E_R_TRIG" Comment="" x="3730.0" y="2605.0">
+		</FB>
+		<FB Name="LeftWork" Type="E_F_TRIG" Comment="" x="3735.0" y="1905.0">
+		</FB>
+		<EventConnections>
+			<Connection Source="S_Cyl.setValve" Destination="Cyl_HW_2Sensors.setValve1" Comment="" dx1="120.0" dx2="105.0" dy="0.0"/>
+			<Connection Source="S_Cyl.setValve" Destination="Cyl_HW_2Sensors.setValve2" Comment="" dx1="70.0" dx2="155.0" dy="0.0"/>
+			<Connection Source="INIT" Destination="S_Cyl.INIT" Comment="" dx1="170.0"/>
+			<Connection Source="gotoHome" Destination="S_Cyl.gotoHome" Comment="" dx1="170.0"/>
+			<Connection Source="gotoWork" Destination="S_Cyl.gotoWork" Comment="" dx1="170.0"/>
+			<Connection Source="ErrorDetected" Destination="S_Cyl.ErrorDetected" Comment="" dx1="170.0"/>
+			<Connection Source="S_Cyl.INITO" Destination="INITO" Comment="" dx1="70.0" dx2="3085.0" dy="0.0"/>
+			<Connection Source="S_Cyl.DoneHome" Destination="ArrivedHome" Comment="" dx1="120.0" dx2="3035.0" dy="0.0"/>
+			<Connection Source="S_Cyl.DoneWork" Destination="ArrivedWork" Comment="" dx1="170.0" dx2="2985.0" dy="0.0"/>
+			<Connection Source="LeftWork.EO" Destination="LeftWork" Comment="" dx1="380.0"/>
+			<Connection Source="Cyl_HW_2Sensors.atWork" Destination="LeftWork.EI" Comment="" dx1="220.0" dx2="155.0" dy="0.0"/>
+			<Connection Source="ArrivedWork.EO" Destination="S_Cyl.atWork" Comment="" dx1="70.0" dx2="55.0" dy="385.0"/>
+			<Connection Source="Cyl_HW_2Sensors.atWork" Destination="ArrivedWork.EI" Comment="" dx1="170.0" dx2="205.0" dy="0.0"/>
+			<Connection Source="LeftHome.EO" Destination="LeftHome" Comment="" dx1="380.0"/>
+			<Connection Source="Cyl_HW_2Sensors.atHome" Destination="LeftHome.EI" Comment="" dx1="320.0" dx2="55.0" dy="0.0"/>
+			<Connection Source="ArrivedHome.EO" Destination="S_Cyl.atHome" Comment="" dx1="120.0" dx2="105.0" dy="2540.0"/>
+			<Connection Source="Cyl_HW_2Sensors.atHome" Destination="ArrivedHome.EI" Comment="" dx1="70.0" dx2="305.0" dy="0.0"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="S_Cyl.HW1" Destination="Cyl_HW_2Sensors.Valve1" Comment=""/>
+			<Connection Source="S_Cyl.HW2" Destination="Cyl_HW_2Sensors.Valve2" Comment=""/>
+			<Connection Source="Cyl_HW_2Sensors.SensorWork" Destination="LeftWork.QI" Comment="" dx1="120.0" dx2="255.0" dy="0.0"/>
+			<Connection Source="Cyl_HW_2Sensors.SensorWork" Destination="ArrivedWork.QI" Comment="" dx1="70.0" dx2="305.0" dy="0.0"/>
+			<Connection Source="Cyl_HW_2Sensors.SensorHome" Destination="LeftHome.QI" Comment=""/>
+			<Connection Source="Cyl_HW_2Sensors.SensorHome" Destination="ArrivedHome.QI" Comment="" dx1="270.0" dx2="105.0" dy="0.0"/>
+		</DataConnections>
+	</SubAppNetwork>
+</SubAppType>

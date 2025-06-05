@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Template for a simple Basic Function Block Type" Name="GripperCtrl">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="az" Date="2018-07-09" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="" Name="updSensors" Type="Event">
+        <With Var="senReleased"/>
+        <With Var="senGripped"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="" Name="setOutputs" Type="Event">
+        <With Var="performGrip"/>
+        <With Var="performRelease"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="" Name="senReleased" Type="BOOL"/>
+      <VarDeclaration Comment="" Name="senGripped" Type="BOOL"/>
+      <VarDeclaration Comment="timeout value till a move should start" Name="moveStartTime" Type="TIME"/>
+      <VarDeclaration Comment="timeout till a full movement completes" Name="moveCompletionTime" Type="TIME"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="" Name="performGrip" Type="BOOL"/>
+      <VarDeclaration Comment="" Name="performRelease" Type="BOOL"/>
+    </OutputVars>
+    <Plugs>
+      <AdapterDeclaration Comment="" Name="timer" Type="ARTimeOut"/>
+    </Plugs>
+    <Sockets>
+      <AdapterDeclaration Comment="Command interface for requesting gripper actions" Name="cmd" Type="AGripper"/>
+    </Sockets>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="300.0" y="715.0"/>
+      <ECState Comment="Initialization" Name="Reseting" x="1235.0" y="665.0">
+        <ECAction Algorithm="moveHome" Output="setOutputs"/>
+        <ECAction Algorithm="setMovementTime" Output="timer.START"/>
+      </ECState>
+      <ECState Comment="" Name="Error" x="1280.0" y="1880.0">
+        <ECAction Algorithm="stopAllMovement" Output="setOutputs"/>
+        <ECAction Output="cmd.error"/>
+      </ECState>
+      <ECState Comment="" Name="Released" x="3700.0" y="700.0">
+        <ECAction Algorithm="stopAllMovement" Output="setOutputs"/>
+        <ECAction Output="cmd.done"/>
+      </ECState>
+      <ECState Comment="" Name="Gripped" x="3700.0" y="2600.0">
+        <ECAction Algorithm="stopAllMovement" Output="setOutputs"/>
+        <ECAction Output="cmd.done"/>
+      </ECState>
+      <ECState Comment="" Name="Reseted" x="2710.0" y="380.0">
+        <ECAction Output="cmd.reseted"/>
+      </ECState>
+      <ECState Comment="" Name="Gripp" x="5100.0" y="1200.0">
+        <ECAction Algorithm="moveWork" Output="setOutputs"/>
+        <ECAction Algorithm="setMovementStartTime" Output="timer.START"/>
+      </ECState>
+      <ECState Comment="" Name="GripMovementStarted" x="5100.0" y="1695.0">
+        <ECAction Algorithm="setMovementTime" Output="timer.START"/>
+      </ECState>
+      <ECState Comment="" Name="StartRelease" x="3000.0" y="2000.0">
+        <ECAction Algorithm="moveWork" Output="setOutputs"/>
+        <ECAction Algorithm="setMovementStartTime" Output="timer.START"/>
+      </ECState>
+      <ECState Comment="" Name="ReleaseMovementStarted" x="2800.0" y="1600.0">
+        <ECAction Algorithm="setMovementTime" Output="timer.START"/>
+      </ECState>
+      <ECTransition Comment="" Condition="[cmd.reset]" Destination="Reseting" Source="START" x="905.0" y="780.0"/>
+      <ECTransition Comment="" Condition="[cmd.reset]" Destination="Reseting" Source="Error" x="740.0" y="1575.0"/>
+      <ECTransition Comment="" Condition="1" Destination="Released" Source="Reseted" x="3335.0" y="650.0"/>
+      <ECTransition Comment="" Condition="[true = senReleased]" Destination="Reseted" Source="Reseting" x="1955.0" y="240.0"/>
+      <ECTransition Comment="" Condition="[timer.TimeOut]" Destination="Error" Source="Reseting" x="1300.0" y="1315.0"/>
+      <ECTransition Comment="" Condition="[false = senReleased]" Destination="GripMovementStarted" Source="Gripp" x="5340.0" y="1490.0"/>
+      <ECTransition Comment="" Condition="[true = senGripped]" Destination="Gripped" Source="GripMovementStarted" x="5320.0" y="2280.0"/>
+      <ECTransition Comment="" Condition="[cmd.grip]" Destination="Gripp" Source="Released" x="4155.0" y="1090.0"/>
+      <ECTransition Comment="" Condition="[timer.TimeOut]" Destination="Error" Source="Gripp" x="1865.0" y="1215.0"/>
+      <ECTransition Comment="" Condition="[timer.TimeOut]" Destination="Error" Source="GripMovementStarted" x="2300.0" y="950.0"/>
+      <ECTransition Comment="" Condition="[cmd.release]" Destination="StartRelease" Source="Gripped" x="3460.0" y="2450.0"/>
+      <ECTransition Comment="" Condition="[false = senReleased]" Destination="ReleaseMovementStarted" Source="StartRelease" x="3180.0" y="1915.0"/>
+      <ECTransition Comment="" Condition="[[true = senReleased]]" Destination="Released" Source="ReleaseMovementStarted" x="3475.0" y="1015.0"/>
+      <ECTransition Comment="" Condition="[timer.TimeOut]" Destination="Error" Source="ReleaseMovementStarted" x="1865.0" y="1755.0"/>
+      <ECTransition Comment="" Condition="[timer.TimeOut]" Destination="Error" Source="StartRelease" x="1920.0" y="2700.0"/>
+    </ECC>
+    <Algorithm Comment="Initialization algorithm" Name="moveHome">
+      <ST Text="performRelease:= true;&#10;performGrip := false;&#10;"/>
+    </Algorithm>
+    <Algorithm Comment="Normally executed algorithm" Name="moveWork">
+      <ST Text="performRelease := false;&#10;performGrip := true;&#10;"/>
+    </Algorithm>
+    <Algorithm Comment="new algorithm" Name="setMovementStartTime">
+      <ST Text="&#10;timer.DT := moveStartTime;&#10;&#10;"/>
+    </Algorithm>
+    <Algorithm Comment="new algorithm" Name="setMovementTime">
+      <ST Text="timer.DT := moveCompletionTime;&#10;"/>
+    </Algorithm>
+    <Algorithm Comment="new algorithm" Name="stopAllMovement">
+      <ST Text="performGrip := false;&#10;performRelease := false;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Template for an empty basic function block" Name="ConveyorCtrl">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="az" Date="2018-09-13" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs/>
+    <EventOutputs/>
+    <InputVars/>
+    <OutputVars/>
+    <Plugs>
+      <AdapterDeclaration Comment="" Name="motor" Type="AMotor"/>
+      <AdapterDeclaration Comment="" Name="inletBlocker" Type="ABlocker"/>
+      <AdapterDeclaration Comment="" Name="mainBlocker" Type="ABlocker"/>
+      <AdapterDeclaration Comment="" Name="index" Type="ACylinder"/>
+    </Plugs>
+    <Sockets>
+      <AdapterDeclaration Comment="" Name="cmd" Type="AConveyor"/>
+    </Sockets>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="" Name="Start" x="1980.0" y="365.0">
+        <ECAction Output="index.reset"/>
+        <ECAction Output="inletBlocker.block"/>
+        <ECAction Output="mainBlocker.block"/>
+        <ECAction Output="motor.turnOn"/>
+      </ECState>
+      <ECState Comment="" Name="Running" x="2000.0" y="1300.0">
+        <ECAction Output="cmd.running"/>
+      </ECState>
+      <ECState Comment="" Name="PalletteAtProcessing" x="3300.0" y="800.0">
+        <ECAction Output="index.work"/>
+      </ECState>
+      <ECState Comment="" Name="PalletteFixed" x="4780.0" y="705.0">
+        <ECAction Output="cmd.palletteReady"/>
+      </ECState>
+      <ECState Comment="" Name="ReleasePallette" x="4875.0" y="1300.0">
+        <ECAction Output="index.home"/>
+      </ECState>
+      <ECState Comment="" Name="PassPlallette" x="4890.0" y="1695.0">
+        <ECAction Output="mainBlocker.letPassSingle"/>
+      </ECState>
+      <ECState Comment="" Name="insertNextPallette" x="4780.0" y="2085.0">
+        <ECAction Output="inletBlocker.letPassSingle"/>
+      </ECState>
+      <ECState Comment="" Name="Stop" x="560.0" y="1660.0">
+        <ECAction Output="mainBlocker.letPass"/>
+        <ECAction Output="inletBlocker.letPass"/>
+        <ECAction Output="motor.turnOff"/>
+      </ECState>
+      <ECTransition Comment="" Condition="cmd.start" Destination="Start" Source="START" x="1390.0" y="470.0"/>
+      <ECTransition Comment="" Condition="motor.done" Destination="Running" Source="Start" x="1970.0" y="900.0"/>
+      <ECTransition Comment="" Condition="mainBlocker.palletteWaiting" Destination="PalletteAtProcessing" Source="Running" x="2800.0" y="1110.0"/>
+      <ECTransition Comment="" Condition="index.done" Destination="PalletteFixed" Source="PalletteAtProcessing" x="4155.0" y="640.0"/>
+      <ECTransition Comment="" Condition="cmd.palletteProcessed" Destination="ReleasePallette" Source="PalletteFixed" x="5085.0" y="1060.0"/>
+      <ECTransition Comment="" Condition="index.done" Destination="PassPlallette" Source="ReleasePallette" x="5060.0" y="1550.0"/>
+      <ECTransition Comment="" Condition="inletBlocker.pallettePassed" Destination="insertNextPallette" Source="PassPlallette" x="4960.0" y="1980.0"/>
+      <ECTransition Comment="" Condition="1" Destination="Running" Source="insertNextPallette" x="3095.0" y="2280.0"/>
+      <ECTransition Comment="" Condition="cmd.stop" Destination="Stop" Source="Running" x="1410.0" y="1525.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="Stop" x="675.0" y="1105.0"/>
+    </ECC>
+  </BasicFB>
+</FBType>

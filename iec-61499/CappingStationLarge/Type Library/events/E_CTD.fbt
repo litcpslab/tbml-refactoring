@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_CTD" Comment="Event-Driven Down Counter">
+	<Identification Standard="61499-1-A.x" Classification="Event-driven blocks" Function="Down-counter" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="CD" Type="Event" Comment="Count Down">
+			</Event>
+			<Event Name="LD" Type="Event" Comment="Load counter value">
+				<With Var="PV"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CDO" Type="Event" Comment="Count Down Output Event">
+				<With Var="Q"/>
+				<With Var="CV"/>
+			</Event>
+			<Event Name="LDO" Type="Event" Comment="Reset Output Event">
+				<With Var="Q"/>
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="PV" Type="UINT" Comment="Preset Value"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="CV &amp;lt;= 0"/>
+			<VarDeclaration Name="CV" Type="UINT" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="" x="240" y="90">
+			</ECState>
+			<ECState Name="CU" Comment="" x="865" y="90">
+				<ECAction Algorithm="CD" Output="CDO"/>
+			</ECState>
+			<ECState Name="LD" Comment="" x="450" y="610">
+				<ECAction Algorithm="LD" Output="LDO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="CU" Condition="CD[(CV &gt;= 1)]" Comment="" x="1035" y="460"/>
+			<ECTransition Source="CU" Destination="START" Condition="1" Comment="" x="630" y="90"/>
+			<ECTransition Source="START" Destination="LD" Condition="LD" Comment="" x="395" y="510"/>
+			<ECTransition Source="LD" Destination="START" Condition="1" Comment="" x="240" y="610"/>
+		</ECC>
+		<Algorithm Name="CD" Comment="">
+			<ST><![CDATA[ALGORITHM CD
+CV := CV - 1;
+Q := (CV <= 0);
+
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="LDO" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM LDO
+CV := PV;
+Q := (CV <= 0);
+
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="EH_TimeOut" Comment="Basic FB with empty ECC">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK120569" Date="2020-07-27">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="">
+				<With Var="DI1"/>
+			</Event>
+			<Event Name="EI1" Type="Event" Comment="">
+			</Event>
+			<Event Name="EI2" Type="Event" Comment="">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="">
+			</Event>
+			<Event Name="ERROR" Type="Event" Comment="">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DI1" Type="TIME" Comment=""/>
+		</InputVars>
+		<Plugs>
+			<AdapterDeclaration Name="TimeOut" Type="ATimeOut" Comment=""/>
+		</Plugs>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="1900.0" y="1000.0">
+			</ECState>
+			<ECState Name="Init" Comment="" x="2700.0" y="900.0">
+				<ECAction Algorithm="Init" Output="INITO"/>
+			</ECState>
+			<ECState Name="idle" Comment="" x="3100.0" y="1300.0">
+				<ECAction Output="TimeOut.STOP"/>
+			</ECState>
+			<ECState Name="StartTimeOut" Comment="" x="3000.0" y="1900.0">
+				<ECAction Output="TimeOut.START"/>
+			</ECState>
+			<ECState Name="Error" Comment="" x="3200.0" y="2600.0">
+				<ECAction Output="ERROR"/>
+			</ECState>
+			<ECTransition Source="START" Destination="Init" Condition="INIT" Comment="" x="2550.0" y="1035.0"/>
+			<ECTransition Source="Init" Destination="idle" Condition="1" Comment="" x="2875.0" y="1270.0"/>
+			<ECTransition Source="idle" Destination="StartTimeOut" Condition="EI1" Comment="" x="3420.0" y="1655.0"/>
+			<ECTransition Source="StartTimeOut" Destination="Error" Condition="TimeOut.TimeOut" Comment="" x="3335.0" y="2340.0"/>
+			<ECTransition Source="StartTimeOut" Destination="idle" Condition="EI2" Comment="" x="3110.0" y="1680.0"/>
+		</ECC>
+		<Algorithm Name="Init" Comment="">
+			<ST><![CDATA[TimeOut.DT := DI1;]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

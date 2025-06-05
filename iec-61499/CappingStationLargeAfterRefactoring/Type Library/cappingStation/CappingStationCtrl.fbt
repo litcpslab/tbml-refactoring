@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Template for an empty basic function block" Name="CappingStationCtrl">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="az" Date="2018-09-15" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs/>
+    <EventOutputs/>
+    <InputVars/>
+    <OutputVars/>
+    <Plugs>
+      <AdapterDeclaration Comment="" Name="pickAndPlace" Type="APickNPlace"/>
+      <AdapterDeclaration Comment="" Name="supply" Type="ASupply"/>
+      <AdapterDeclaration Comment="" Name="conveyor" Type="AConveyor"/>
+    </Plugs>
+    <Sockets> 
+      <AdapterDeclaration Comment="" Name="cmd" Type="AStation"/>
+    </Sockets>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="" Name="ResetPnP" x="1880.0" y="300.0">
+        <ECAction Output="pickAndPlace.reset"/>
+      </ECState>
+      <ECState Comment="" Name="ResetSupply" x="1880.0" y="830.0">
+        <ECAction Output="supply.reset"/>
+      </ECState>
+      <ECState Comment="" Name="ResetConveyor" x="1880.0" y="1205.0">
+        <ECAction Output="conveyor.start"/>
+      </ECState>
+      <ECState Comment="" Name="Running" x="1880.0" y="1635.0">
+        <ECAction Output="cmd.running"/>
+      </ECState>
+      <ECState Comment="" Name="Stopping" x="645.0" y="1630.0">
+        <ECAction Output="conveyor.stop"/>
+      </ECState>
+      <ECState Comment="" Name="Stopped" x="610.0" y="1140.0">
+        <ECAction Output="cmd.stopped"/>
+      </ECState>
+      <ECState Comment="" Name="WaitForPallete" x="2600.0" y="2100.0"/>
+      <ECState Comment="" Name="WaitForCap" x="3700.0" y="1100.0">
+        <ECAction Output="supply.providePart"/>
+      </ECState>
+      <ECState Comment="" Name="GrippCap" x="3700.0" y="1510.0">
+        <ECAction Output="pickAndPlace.gripp"/>
+      </ECState>
+      <ECState Comment="" Name="ReleaseCap" x="3700.0" y="1800.0">
+        <ECAction Output="supply.releasePart"/>
+      </ECState>
+      <ECState Comment="" Name="InsertCap" x="3700.0" y="2200.0">
+        <ECAction Output="pickAndPlace.insertA"/>
+      </ECState>
+      <ECState Comment="" Name="ReleasePalette" x="3600.0" y="2700.0">
+        <ECAction Output="conveyor.palletteProcessed"/>
+        <ECAction Output="cmd.onePartProcessed"/>
+      </ECState>
+      <ECTransition Comment="" Condition="cmd.start" Destination="ResetPnP" Source="START" x="1155.0" y="430.0"/>
+      <ECTransition Comment="" Condition="pickAndPlace.done" Destination="ResetSupply" Source="ResetPnP" x="2065.0" y="685.0"/>
+      <ECTransition Comment="" Condition="supply.resetO" Destination="ResetConveyor" Source="ResetSupply" x="2070.0" y="1040.0"/>
+      <ECTransition Comment="" Condition="conveyor.running" Destination="Running" Source="ResetConveyor" x="2170.0" y="1500.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="Stopped" x="660.0" y="870.0"/>
+      <ECTransition Comment="" Condition="1" Destination="Stopped" Source="Stopping" x="790.0" y="1465.0"/>
+      <ECTransition Comment="" Condition="cmd.stop" Destination="Stopping" Source="WaitForPallete" x="1385.0" y="1880.0"/>
+      <ECTransition Comment="" Condition="1" Destination="WaitForPallete" Source="Running" x="2165.0" y="1950.0"/>
+      <ECTransition Comment="" Condition="conveyor.palletteReady" Destination="WaitForCap" Source="WaitForPallete" x="3190.0" y="1500.0"/>
+      <ECTransition Comment="" Condition="supply.partReady" Destination="GrippCap" Source="WaitForCap" x="3970.0" y="1345.0"/>
+      <ECTransition Comment="" Condition="pickAndPlace.done" Destination="ReleaseCap" Source="GrippCap" x="3835.0" y="1710.0"/>
+      <ECTransition Comment="" Condition="pickAndPlace.workPosFree" Destination="ReleasePalette" Source="InsertCap" x="3895.0" y="2530.0"/>
+      <ECTransition Comment="" Condition="supply.partReleased" Destination="InsertCap" Source="ReleaseCap" x="3880.0" y="2010.0"/>
+      <ECTransition Comment="" Condition="pickAndPlace.done" Destination="WaitForPallete" Source="ReleasePalette" x="2780.0" y="2495.0"/>
+    </ECC>
+  </BasicFB>
+</FBType>

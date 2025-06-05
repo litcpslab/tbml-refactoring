@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataType Name="message">
+	<VersionInfo Version="1.0" Author="AK123700" Date="2025-06-05">
+	</VersionInfo>
+	<StructuredType>
+		<VarDeclaration Name="pubAdress" Type="STRING"/>
+		<VarDeclaration Name="subAdress" Type="STRING"/>
+		<VarDeclaration Name="msg" Type="STRING"/>
+	</StructuredType>
+</DataType>

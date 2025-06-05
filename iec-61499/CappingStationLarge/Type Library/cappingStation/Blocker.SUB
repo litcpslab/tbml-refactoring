@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Subapplication Type" Name="Blocker">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="az" Date="2018-09-13" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="" Name="INIT" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="" Name="INITO" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars/>
+    <OutputVars/>
+    <Sockets>
+      <AdapterDeclaration Comment="" Name="cmd" Type="ABlocker"/>
+    </Sockets>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="After" Type="IX" x="400.0" y="1100.0">
+      <Parameter Name="QI" Value="1"/>
+    </FB>
+    <FB Comment="" Name="Before" Type="IX" x="400.0" y="200.0">
+      <Parameter Name="QI" Value="1"/>
+    </FB>
+    <SubApp Comment="" Name="Blocker" Type="ZylinderSingle" x="2800.0" y="200.0">
+      <Parameter Name="moveStartTime" Value="T#100ms"/>
+      <Parameter Name="moveTime" Value="T#500ms"/>
+    </SubApp>
+    <FB Comment="" Name="BlockerCtrl" Type="BlockerCtrl" x="1500.0" y="400.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="BlockerCtrl.inSensor" Source="Before.IN" dx1="355.0"/>
+      <Connection Comment="" Destination="BlockerCtrl.outSensor" Source="After.IN" dx1="460.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="After.INIT" Source="Before.INITO" dx1="60.0" dx2="60.0" dy="645.0"/>
+      <Connection Comment="" Destination="Before.INIT" Source="INIT" dx1="60.0"/>
+      <Connection Comment="" Destination="Blocker.INIT" Source="After.INITO" dx1="165.0"/>
+      <Connection Comment="" Destination="INITO" Source="Blocker.INITO" dx1="375.0"/>
+      <Connection Comment="" Destination="BlockerCtrl.updSensors" Source="Before.IND"/>
+      <Connection Comment="" Destination="BlockerCtrl.updSensors" Source="After.IND" dx1="255.0"/>
+    </EventConnections>
+    <AdapterConnections>
+      <Connection Comment="" Destination="BlockerCtrl.cmd" Source="cmd" dx1="1155.0"/> 
+      <Connection Comment="" Destination="Blocker.cmd" Source="BlockerCtrl.blockerCyl"/>
+    </AdapterConnections>
+  </SubAppNetwork>
+</SubAppType>

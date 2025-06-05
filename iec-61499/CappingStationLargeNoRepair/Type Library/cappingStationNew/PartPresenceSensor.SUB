@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SubAppType Name="PartPresenceSensor" Comment="Subapplication Type">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK120569" Date="2020-07-28">
+	</VersionInfo>
+	<SubAppInterfaceList>
+		<SubAppEventInputs>
+			<SubAppEvent Name="reqPart" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="reqNoPart" Type="Event" Comment="">
+			</SubAppEvent>
+		</SubAppEventInputs>
+		<SubAppEventOutputs>
+			<SubAppEvent Name="PartArrived" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="PartLeft" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="PartDetected" Type="Event" Comment="">
+			</SubAppEvent>
+		</SubAppEventOutputs>
+	</SubAppInterfaceList>
+	<SubAppNetwork>
+		<FB Name="E_R_TRIG_1" Type="E_R_TRIG" Comment="" x="690.0" y="540.0">
+		</FB>
+		<FB Name="After" Type="IX" Comment="" x="-215.0" y="540.0">
+		</FB>
+		<FB Name="E_R_TRIG_2" Type="E_F_TRIG" Comment="" x="690.0" y="1165.0">
+		</FB>
+		<FB Name="E_REND" Type="E_REND" Comment="" x="2590.0" y="140.0">
+		</FB>
+		<FB Name="E_REND_1" Type="E_REND" Comment="" x="1685.0" y="990.0">
+		</FB>
+		<EventConnections>
+			<Connection Source="After.IND" Destination="E_R_TRIG_1.EI" Comment="" dx1="105.0"/>
+			<Connection Source="After.IND" Destination="E_R_TRIG_2.EI" Comment="" dx1="105.0"/>
+			<Connection Source="E_R_TRIG_1.EO" Destination="E_REND.EI2" Comment="" dx1="1010.0"/>
+			<Connection Source="E_R_TRIG_2.EO" Destination="E_REND_1.EI2" Comment="" dx1="105.0"/>
+			<Connection Source="reqPart" Destination="E_REND.EI1" Comment="" dx1="685.0"/>
+			<Connection Source="reqNoPart" Destination="E_REND_1.EI1" Comment="" dx1="610.0" dx2="150.0" dy="160.0"/>
+			<Connection Source="E_REND.EO" Destination="E_REND_1.R" Comment="" dx1="105.0" dx2="225.0" dy="560.0"/>
+			<Connection Source="E_REND_1.EO" Destination="E_REND.R" Comment="" dx1="180.0"/>
+			<Connection Source="E_REND.EO" Destination="PartArrived" Comment="" dx1="105.0"/>
+			<Connection Source="E_REND_1.EO" Destination="PartLeft" Comment="" dx1="1085.0"/>
+			<Connection Source="E_REND.EO" Destination="PartDetected" Comment="" dx1="945.0"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="After.IN" Destination="E_R_TRIG_1.QI" Comment="" dx1="180.0"/>
+			<Connection Source="After.IN" Destination="E_R_TRIG_2.QI" Comment="" dx1="180.0"/>
+		</DataConnections>
+	</SubAppNetwork>
+</SubAppType>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="mergeMsg" Comment="Basic FB with empty ECC">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK120569" Date="2021-03-21">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI1" Type="Event" Comment="">
+				<With Var="msg1"/>
+			</Event>
+			<Event Name="EI2" Type="Event" Comment="">
+				<With Var="msg2"/>
+			</Event>
+			<Event Name="EI3" Type="Event" Comment="">
+				<With Var="msg3"/>
+			</Event>
+			<Event Name="EI4" Type="Event" Comment="">
+				<With Var="msg4"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO1" Type="Event" Comment="">
+				<With Var="msg"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="msg1" Type="STRING" Comment=""/>
+			<VarDeclaration Name="msg2" Type="STRING" Comment=""/>
+			<VarDeclaration Name="msg3" Type="STRING" Comment=""/>
+			<VarDeclaration Name="msg4" Type="STRING" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="msg" Type="STRING" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="2200.0" y="1200.0">
+			</ECState>
+			<ECState Name="msg2" Comment="" x="2900.0" y="1700.0">
+				<ECAction Algorithm="sendMsg2" Output="EO1"/>
+			</ECState>
+			<ECState Name="msg1" Comment="" x="3090.0" y="825.0">
+				<ECAction Algorithm="sendMsg1" Output="EO1"/>
+			</ECState>
+			<ECState Name="msg4" Comment="" x="1560.0" y="720.0">
+				<ECAction Algorithm="sendMsg4" Output="EO1"/>
+			</ECState>
+			<ECState Name="msg3" Comment="" x="1510.0" y="1710.0">
+				<ECAction Algorithm="sendMsg3" Output="EO1"/>
+			</ECState>
+			<ECTransition Source="START" Destination="msg2" Condition="EI2" Comment="" x="2705.0" y="1515.0"/>
+			<ECTransition Source="START" Destination="msg1" Condition="EI1" Comment="" x="2680.0" y="1010.0"/>
+			<ECTransition Source="START" Destination="msg4" Condition="EI4" Comment="" x="1885.0" y="1080.0"/>
+			<ECTransition Source="START" Destination="msg3" Condition="EI3" Comment="" x="2010.0" y="1530.0"/>
+			<ECTransition Source="msg3" Destination="START" Condition="1" Comment="" x="1875.0" y="1435.0"/>
+			<ECTransition Source="msg4" Destination="START" Condition="1" Comment="" x="2140.0" y="1055.0"/>
+			<ECTransition Source="msg1" Destination="START" Condition="1" Comment="" x="2955.0" y="1215.0"/>
+			<ECTransition Source="msg2" Destination="START" Condition="1" Comment="" x="2620.0" y="1535.0"/>
+		</ECC>
+		<Algorithm Name="sendMsg1" Comment="">
+			<ST><![CDATA[msg := msg1;]]></ST>
+		</Algorithm>
+		<Algorithm Name="sendMsg2" Comment="">
+			<ST><![CDATA[msg := msg2;]]></ST>
+		</Algorithm>
+		<Algorithm Name="sendMsg3" Comment="">
+			<ST><![CDATA[msg := msg3;]]></ST>
+		</Algorithm>
+		<Algorithm Name="sendMsg4" Comment="">
+			<ST><![CDATA[msg := msg4;]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

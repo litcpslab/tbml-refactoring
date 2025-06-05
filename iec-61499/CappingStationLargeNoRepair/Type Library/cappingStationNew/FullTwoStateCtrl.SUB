@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SubAppType Name="FullTwoStateCtrl" Comment="Subapplication Type">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK120569" Date="2020-07-27">
+	</VersionInfo>
+	<SubAppInterfaceList>
+		<SubAppEventInputs>
+			<SubAppEvent Name="INIT" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="gotoHome" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="gotoWork" Type="Event" Comment="">
+			</SubAppEvent>
+		</SubAppEventInputs>
+		<SubAppEventOutputs>
+			<SubAppEvent Name="INITO" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="arrivedHome" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="arrivedWork" Type="Event" Comment="">
+			</SubAppEvent>
+		</SubAppEventOutputs>
+	</SubAppInterfaceList>
+	<SubAppNetwork>
+		<SubApp Name="SubApp_1" Type="AbstTwoStateCtrl" Comment="" x="980.0" y="1480.0">
+		</SubApp>
+		<FB Name="LeftHome" Type="EH_TimeOut" Comment="" x="2400.0" y="350.0">
+		</FB>
+		<FB Name="LeftWork" Type="EH_TimeOut" Comment="" x="2400.0" y="1150.0">
+		</FB>
+		<FB Name="arrivedHome" Type="EH_TimeOut" Comment="" x="2400.0" y="2380.0">
+		</FB>
+		<FB Name="ArrivedWork" Type="EH_TimeOut" Comment="" x="2400.0" y="3180.0">
+		</FB>
+		<FB Name="E_TimeOut" Type="E_TimeOut" Comment="" x="3150.0" y="650.0">
+		</FB>
+		<FB Name="E_TimeOut_1" Type="E_TimeOut" Comment="" x="3150.0" y="1450.0">
+		</FB>
+		<FB Name="E_TimeOut_2" Type="E_TimeOut" Comment="" x="3150.0" y="2680.0">
+		</FB>
+		<FB Name="E_TimeOut_3" Type="E_TimeOut" Comment="" x="3150.0" y="3480.0">
+		</FB>
+		<EventConnections>
+			<Connection Source="gotoHome" Destination="SubApp_1.gotoHome" Comment=""/>
+			<Connection Source="gotoWork" Destination="SubApp_1.gotoWork" Comment="" dx1="145.0"/>
+			<Connection Source="INIT" Destination="SubApp_1.INIT" Comment=""/>
+			<Connection Source="SubApp_1.INITO" Destination="INITO" Comment="" dx1="170.0" dx2="2360.0" dy="0.0"/>
+			<Connection Source="SubApp_1.ArrivedHome" Destination="arrivedHome" Comment="" dx1="170.0" dx2="2360.0" dy="0.0"/>
+			<Connection Source="SubApp_1.ArrivedWork" Destination="arrivedWork" Comment=""/>
+			<Connection Source="SubApp_1.LeftHome" Destination="LeftHome.EI2" Comment="" dx1="70.0" dx2="155.0" dy="0.0"/>
+			<Connection Source="gotoWork" Destination="LeftHome.EI1" Comment="" dx1="855.0"/>
+			<Connection Source="gotoHome" Destination="LeftWork.EI1" Comment="" dx1="855.0"/>
+			<Connection Source="SubApp_1.LeftWork" Destination="LeftWork.EI2" Comment="" dx1="120.0" dx2="105.0" dy="0.0"/>
+			<Connection Source="gotoHome" Destination="arrivedHome.EI1" Comment="" dx1="855.0"/>
+			<Connection Source="SubApp_1.ArrivedHome" Destination="arrivedHome.EI2" Comment="" dx1="120.0" dx2="105.0" dy="0.0"/>
+			<Connection Source="gotoWork" Destination="ArrivedWork.EI1" Comment=""/>
+			<Connection Source="SubApp_1.ArrivedWork" Destination="ArrivedWork.EI2" Comment="" dx1="70.0" dx2="155.0" dy="0.0"/>
+			<Connection Source="ArrivedWork.ERROR" Destination="SubApp_1.ErrorDetected" Comment="" dx1="70.0" dx2="55.0" dy="-315.0"/>
+			<Connection Source="arrivedHome.ERROR" Destination="SubApp_1.ErrorDetected" Comment="" dx1="70.0" dx2="55.0" dy="-315.0"/>
+			<Connection Source="LeftWork.ERROR" Destination="SubApp_1.ErrorDetected" Comment="" dx1="70.0" dx2="55.0" dy="-315.0"/>
+			<Connection Source="LeftHome.ERROR" Destination="SubApp_1.ErrorDetected" Comment="" dx1="70.0" dx2="55.0" dy="-315.0"/>
+		</EventConnections>
+		<AdapterConnections>
+			<Connection Source="LeftHome.TimeOut" Destination="E_TimeOut.TimeOutSocket" Comment=""/>
+			<Connection Source="LeftWork.TimeOut" Destination="E_TimeOut_1.TimeOutSocket" Comment=""/>
+			<Connection Source="arrivedHome.TimeOut" Destination="E_TimeOut_2.TimeOutSocket" Comment=""/>
+			<Connection Source="ArrivedWork.TimeOut" Destination="E_TimeOut_3.TimeOutSocket" Comment=""/>
+		</AdapterConnections>
+	</SubAppNetwork>
+</SubAppType>

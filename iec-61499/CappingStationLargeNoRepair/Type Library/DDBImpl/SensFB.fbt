@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="SensFB" Comment="Composite FB wrapping other FBs">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK120569" Date="2021-03-18">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialization Request">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="pubAdr" Type="WSTRING" Comment=""/>
+			<VarDeclaration Name="subAdr" Type="WSTRING" Comment=""/>
+		</InputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="SkillReq" Type="SUBSCRIBE_1" Comment="" x="-215.0" y="330.0">
+		</FB>
+		<FB Name="SensorStatus" Type="IX" Comment="" x="900.0" y="830.0">
+		</FB>
+		<FB Name="PUBLISH_1" Type="PUBLISH_1" Comment="" x="2830.0" y="140.0">
+		</FB>
+		<FB Name="SensMsg" Type="SensMsg" Comment="" x="1880.0" y="435.0">
+		</FB>
+		<EventConnections>
+			<Connection Source="INIT" Destination="SkillReq.INIT" Comment="" dx1="685.0"/>
+			<Connection Source="SkillReq.IND" Destination="SensMsg.Req" Comment="" dx1="1120.0" dx2="250.0" dy="0.0"/>
+			<Connection Source="SensorStatus.IND" Destination="SensMsg.Sens" Comment="" dx1="215.0" dx2="100.0" dy="-395.0"/>
+			<Connection Source="SensMsg.Cnf" Destination="PUBLISH_1.REQ" Comment="" dx1="105.0"/>
+			<Connection Source="SkillReq.INITO" Destination="SensorStatus.INIT" Comment="" dx1="180.0"/>
+			<Connection Source="SensorStatus.INITO" Destination="PUBLISH_1.INIT" Comment="" dx1="140.0" dx2="1050.0" dy="-545.0"/>
+			<Connection Source="PUBLISH_1.INITO" Destination="INITO" Comment="" dx1="105.0"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="pubAdr" Destination="PUBLISH_1.ID" Comment="" dx1="610.0" dx2="225.0" dy="-50.0"/>
+			<Connection Source="subAdr" Destination="SkillReq.ID" Comment="" dx1="610.0"/>
+			<Connection Source="SkillReq.RD_1" Destination="SensMsg.DI1" Comment="" dx1="105.0" dx2="175.0" dy="-345.0"/>
+			<Connection Source="SensMsg.DO1" Destination="PUBLISH_1.SD_1" Comment="" dx1="105.0"/>
+			<Connection Source="SensorStatus.IN" Destination="SensMsg.DI2" Comment="" dx1="290.0"/>
+		</DataConnections>
+	</FBNetwork>
+</FBType>

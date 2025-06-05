@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Subapplication Type" Name="Motor">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="az" Date="2018-09-13" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="" Name="INIT" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="" Name="INITO" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars/>
+    <OutputVars/>
+    <Sockets>
+      <AdapterDeclaration Comment="" Name="cmd" Type="AMotor"/>
+    </Sockets>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="MotorRunning" Type="IX" x="1400.0" y="100.0">
+      <Parameter Name="QI" Value="1"/>
+    </FB>
+    <FB Comment="" Name="MotorOn" Type="QX" x="4400.0" y="600.0">
+      <Parameter Name="QI" Value="1"/>
+    </FB>
+    <FB Comment="" Name="MotorCtrl" Type="MotorCtrl" x="2555.0" y="690.0"/>
+    <FB Comment="" Name="E_RTimeOut" Type="E_RTimeOut" x="3900.0" y="1400.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="MotorCtrl.motorRunning" Source="MotorRunning.IN" dx1="350.0"/>
+      <Connection Comment="" Destination="MotorOn.OUT" Source="MotorCtrl.motorOn" dx1="660.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="MotorCtrl.sensorUpdate" Source="MotorRunning.IND" dx1="535.0"/>
+      <Connection Comment="" Destination="MotorOn.REQ" Source="MotorCtrl.updateActuators" dx1="380.0"/>
+      <Connection Comment="" Destination="MotorRunning.INIT" Source="INIT" dx1="580.0"/>
+      <Connection Comment="" Destination="MotorOn.INIT" Source="MotorRunning.INITO" dx1="2410.0"/>
+      <Connection Comment="" Destination="INITO" Source="MotorOn.INITO" dx1="375.0"/>
+    </EventConnections>
+    <AdapterConnections>
+      <Connection Comment="" Destination="MotorCtrl.cmd" Source="cmd" dx1="1155.0"/>
+      <Connection Comment="" Destination="E_RTimeOut.TimeOutSocket" Source="MotorCtrl.timer" dx1="130.0"/>
+    </AdapterConnections>
+  </SubAppNetwork>
+</SubAppType>

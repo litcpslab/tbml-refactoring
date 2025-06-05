@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Single actuated zylinder where the home position is automatically reached with a spring" Name="ZylinderSingle">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="az" Date="2018-07-10" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="" Name="INIT" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="" Name="INITO" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="" Name="moveStartTime" Type="TIME"/>
+      <VarDeclaration Comment="" Name="moveTime" Type="TIME"/>
+    </InputVars>
+    <OutputVars/>
+    <Sockets>
+      <AdapterDeclaration Comment="" Name="cmd" Type="ACylinder"/>
+    </Sockets>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="ValveWork" Type="QX" x="4480.0" y="1725.0">
+      <Parameter Name="QI" Value="1"/>
+    </FB>
+    <FB Comment="" Name="Home" Type="IX" x="900.0" y="800.0">
+      <Parameter Name="QI" Value="1"/>
+    </FB>
+    <FB Comment="" Name="Work" Type="IX" x="900.0" y="2100.0">
+      <Parameter Name="QI" Value="1"/>
+    </FB>
+    <FB Comment="" Name="E_RTimeOut" Type="E_RTimeOut" x="3500.0" y="1800.0"/>
+    <FB Comment="" Name="CylinderCtrl" Type="CylinderCtrl" x="2090.0" y="1175.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="CylinderCtrl.senHome" Source="Home.IN" dx1="635.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="CylinderCtrl.senWork" Source="Work.IN" dx1="635.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="ValveWork.OUT" Source="CylinderCtrl.moveWork" dx1="930.0" dx2="0.0" dy="0.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="Work.INIT" Source="Home.INITO" dx1="0.0" dx2="0.0" dy="285.0"/>
+      <Connection Comment="" Destination="Home.INIT" Source="INIT" dx1="225.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="INITO" Source="ValveWork.INITO" dx1="240.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="CylinderCtrl.updSensors" Source="Home.IND" dx1="440.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="CylinderCtrl.updSensors" Source="Work.IND" dx1="450.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="ValveWork.REQ" Source="CylinderCtrl.setOutputs" dx1="1035.0" dx2="0.0" dy="0.0"/>
+    </EventConnections>
+    <AdapterConnections>
+      <Connection Comment="" Destination="E_RTimeOut.TimeOutSocket" Source="CylinderCtrl.timer" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="CylinderCtrl.cmd" Source="cmd" dx1="-385.0" dx2="0.0" dy="0.0"/>
+    </AdapterConnections>
+  </SubAppNetwork>
+</SubAppType>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="DDB_EH_TimeOutComplete" Comment="Composite FB wrapping other FBs">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK120569" Date="2021-03-10">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialization Request">
+				<With Var="DI"/>
+				<With Var="errorMsg"/>
+			</Event>
+			<Event Name="E1" Type="Event" Comment="Normal Execution Request">
+			</Event>
+			<Event Name="E2" Type="Event" Comment="">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+			</Event>
+			<Event Name="ERROR" Type="Event" Comment="Execution Confirmation">
+				<With Var="oerrorMsg"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DI" Type="TIME" Comment="Input event qualifier"/>
+			<VarDeclaration Name="errorMsg" Type="STRING" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="oerrorMsg" Type="STRING" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="DDB_EH_TimeOut" Type="DDB_EH_TimeOut" Comment="" x="-70.0" y="45.0">
+		</FB>
+		<FB Name="E_TimeOut" Type="E_TimeOut" Comment="" x="1195.0" y="870.0">
+		</FB>
+		<EventConnections>
+			<Connection Source="DDB_EH_TimeOut.INITO" Destination="INITO" Comment="" dx1="1095.0"/>
+			<Connection Source="INIT" Destination="DDB_EH_TimeOut.INIT" Comment="" dx1="470.0"/>
+			<Connection Source="E1" Destination="DDB_EH_TimeOut.EI1" Comment="" dx1="470.0"/>
+			<Connection Source="E2" Destination="DDB_EH_TimeOut.EI2" Comment="" dx1="470.0"/>
+			<Connection Source="DDB_EH_TimeOut.ERROR" Destination="ERROR" Comment="" dx1="1095.0"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="DI" Destination="DDB_EH_TimeOut.DI1" Comment="" dx1="470.0"/>
+			<Connection Source="errorMsg" Destination="oerrorMsg" Comment="" dx1="3280.0"/>
+		</DataConnections>
+		<AdapterConnections>
+			<Connection Source="DDB_EH_TimeOut.TimeOut" Destination="E_TimeOut.TimeOutSocket" Comment="" dx1="200.0"/>
+		</AdapterConnections>
+	</FBNetwork>
+</FBType>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Subapplication Type" Name="Gripper">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="az" Date="2018-07-10" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="" Name="INIT" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="" Name="INITO" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="" Name="moveStartTime" Type="TIME"/>
+      <VarDeclaration Comment="" Name="moveTime" Type="TIME"/>
+    </InputVars>
+    <OutputVars/>
+    <Sockets>
+      <AdapterDeclaration Comment="" Name="cmd" Type="AGripper"/>
+    </Sockets>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="ValveRelease" Type="QX" x="4480.0" y="1725.0">
+      <Parameter Name="QI" Value="1"/>
+    </FB>
+    <FB Comment="" Name="Released" Type="IX" x="900.0" y="800.0">
+      <Parameter Name="QI" Value="1"/>
+    </FB>
+    <FB Comment="" Name="Gripped" Type="IX" x="900.0" y="2100.0">
+      <Parameter Name="QI" Value="1"/>
+    </FB>
+    <FB Comment="" Name="ValveGrip" Type="QX" x="4500.0" y="900.0">
+      <Parameter Name="QI" Value="1"/>
+    </FB>
+    <FB Comment="" Name="E_RTimeOut" Type="E_RTimeOut" x="3500.0" y="2400.0"/>
+    <FB Comment="" Name="GripperCtrl" Type="GripperCtrl" x="2090.0" y="1175.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="GripperCtrl.senReleased" Source="Released.IN" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="GripperCtrl.senGripped" Source="Gripped.IN" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="ValveGrip.OUT" Source="GripperCtrl.performGrip" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="ValveRelease.OUT" Source="GripperCtrl.performRelease" dx1="900.0" dx2="0.0" dy="0.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="ValveRelease.INIT" Source="ValveGrip.INITO" dx1="0.0" dx2="220.0" dy="205.0"/>
+      <Connection Comment="" Destination="Gripped.INIT" Source="Released.INITO" dx1="0.0" dx2="0.0" dy="285.0"/>
+      <Connection Comment="" Destination="ValveGrip.INIT" Source="Gripped.INITO" dx1="255.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="Released.INIT" Source="INIT" dx1="225.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="INITO" Source="ValveRelease.INITO" dx1="240.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="GripperCtrl.updSensors" Source="Released.IND" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="GripperCtrl.updSensors" Source="Gripped.IND" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="ValveRelease.REQ" Source="GripperCtrl.setOutputs" dx1="695.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="ValveGrip.REQ" Source="GripperCtrl.setOutputs" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </EventConnections>
+    <AdapterConnections>
+      <Connection Comment="" Destination="E_RTimeOut.TimeOutSocket" Source="GripperCtrl.timer" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="GripperCtrl.cmd" Source="cmd" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </AdapterConnections>
+  </SubAppNetwork>
+</SubAppType>

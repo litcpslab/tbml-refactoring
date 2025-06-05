@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="HWMsg" Comment="Basic FB with empty ECC">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK120569" Date="2021-03-18">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="">
+			</Event>
+			<Event Name="EI1" Type="Event" Comment="">
+				<With Var="msg"/>
+			</Event>
+			<Event Name="arrivedHome" Type="Event" Comment="">
+			</Event>
+			<Event Name="arrivedWork" Type="Event" Comment="">
+			</Event>
+			<Event Name="Error" Type="Event" Comment="">
+				<With Var="errorMsg"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="">
+			</Event>
+			<Event Name="EO1" Type="Event" Comment="">
+				<With Var="omsg"/>
+			</Event>
+			<Event Name="gotoHome" Type="Event" Comment="">
+			</Event>
+			<Event Name="gotoWork" Type="Event" Comment="">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="msg" Type="STRING" Comment=""/>
+			<VarDeclaration Name="errorMsg" Type="STRING" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="omsg" Type="STRING" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="900" y="700">
+			</ECState>
+			<ECState Name="home" Comment="" x="2300" y="1200">
+			</ECState>
+			<ECState Name="init" Comment="" x="1800" y="500">
+				<ECAction Output="gotoHome"/>
+			</ECState>
+			<ECState Name="work" Comment="" x="2700" y="3100">
+			</ECState>
+			<ECState Name="gotoWork" Comment="" x="3700" y="1800">
+				<ECAction Output="gotoWork"/>
+			</ECState>
+			<ECState Name="gotoHome" Comment="" x="1800" y="2400">
+				<ECAction Output="gotoHome"/>
+			</ECState>
+			<ECState Name="error" Comment="" x="750" y="1985">
+			</ECState>
+			<ECState Name="sendSkillNAmsg" Comment="" x="3000" y="1000">
+				<ECAction Algorithm="skillNA" Output="EO1"/>
+			</ECState>
+			<ECState Name="sendSkillNAmsg2" Comment="" x="3000" y="3600">
+				<ECAction Algorithm="skillNA" Output="EO1"/>
+			</ECState>
+			<ECState Name="confWork" Comment="" x="3600" y="2500">
+				<ECAction Algorithm="arrivedWorkmsg" Output="EO1"/>
+			</ECState>
+			<ECState Name="confHome" Comment="" x="1500" y="1900">
+				<ECAction Algorithm="arrivedHomemsg" Output="EO1"/>
+			</ECState>
+			<ECState Name="initDone" Comment="" x="2100" y="900">
+				<ECAction Output="INITO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="init" Condition="INIT" Comment="" x="1390" y="620"/>
+			<ECTransition Source="home" Destination="gotoWork" Condition="EI1[msg ==  work]" Comment="" x="3070" y="1515"/>
+			<ECTransition Source="work" Destination="gotoHome" Condition="EI1[msg  == home]" Comment="" x="2245" y="2860"/>
+			<ECTransition Source="error" Destination="init" Condition="INIT" Comment="" x="1330" y="1465"/>
+			<ECTransition Source="gotoHome" Destination="error" Condition="Error" Comment="" x="1300" y="2525"/>
+			<ECTransition Source="home" Destination="error" Condition="Error" Comment="" x="1890" y="1415"/>
+			<ECTransition Source="work" Destination="error" Condition="Error" Comment="" x="1270" y="3055"/>
+			<ECTransition Source="gotoWork" Destination="error" Condition="Error" Comment="" x="1810" y="1715"/>
+			<ECTransition Source="home" Destination="sendSkillNAmsg" Condition="EI1" Comment="" x="2885" y="1265"/>
+			<ECTransition Source="sendSkillNAmsg" Destination="home" Condition="1" Comment="" x="2740" y="1105"/>
+			<ECTransition Source="work" Destination="sendSkillNAmsg2" Condition="EI1" Comment="" x="3075" y="3285"/>
+			<ECTransition Source="sendSkillNAmsg2" Destination="work" Condition="1" Comment="" x="2945" y="3450"/>
+			<ECTransition Source="gotoWork" Destination="confWork" Condition="arrivedWork" Comment="" x="3975" y="2205"/>
+			<ECTransition Source="confWork" Destination="work" Condition="1" Comment="" x="3450" y="2960"/>
+			<ECTransition Source="gotoHome" Destination="confHome" Condition="arrivedHome" Comment="" x="1815" y="2235"/>
+			<ECTransition Source="confHome" Destination="home" Condition="1" Comment="" x="2340" y="1565"/>
+			<ECTransition Source="init" Destination="initDone" Condition="arrivedHome" Comment="" x="2195" y="785"/>
+			<ECTransition Source="initDone" Destination="home" Condition="1" Comment="" x="2360" y="1125"/>
+		</ECC>
+		<Algorithm Name="skillNA" Comment="">
+			<ST><![CDATA[ALGORITHM skillNA
+omsg := WSTRING_TO_STRING("NA");
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="arrivedWorkmsg" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM arrivedWorkmsg
+omsg := WSTRING_TO_STRING("work");
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="arrivedHomemsg" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM arrivedHomemsg
+omsg := WSTRING_TO_STRING("home");
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Template for a simple Basic Function Block Type" Name="CylinderCtrl">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="az" Date="2018-07-09" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="" Name="updSensors" Type="Event">
+        <With Var="senHome"/>
+        <With Var="senWork"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="" Name="setOutputs" Type="Event">
+        <With Var="moveHome"/>
+        <With Var="moveWork"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="" Name="senHome" Type="BOOL"/>
+      <VarDeclaration Comment="" Name="senWork" Type="BOOL"/>
+      <VarDeclaration Comment="timeout value till a move should start" Name="moveStartTime" Type="TIME"/>
+      <VarDeclaration Comment="timeout till a full movement completes" Name="moveCompletionTime" Type="TIME"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="" Name="moveHome" Type="BOOL"/>
+      <VarDeclaration Comment="" Name="moveWork" Type="BOOL"/>
+    </OutputVars>
+    <Plugs>
+      <AdapterDeclaration Comment="" Name="timer" Type="ARTimeOut"/>
+    </Plugs>
+    <Sockets>
+      <AdapterDeclaration Comment="Command interface for requesting cylinder actions" Name="cmd" Type="ACylinder"/>
+    </Sockets>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="300.0" y="715.0"/>
+      <ECState Comment="Initialization" Name="Reseting" x="1235.0" y="665.0">
+        <ECAction Algorithm="moveHome" Output="setOutputs"/>
+        <ECAction Algorithm="setMovementTime" Output="timer.START"/>
+      </ECState>
+      <ECState Comment="" Name="Error" x="1280.0" y="1880.0">
+        <ECAction Algorithm="stopAllMovement" Output="setOutputs"/>
+        <ECAction Output="cmd.error"/>
+      </ECState>
+      <ECState Comment="" Name="Home" x="3700.0" y="700.0">
+        <ECAction Algorithm="stopAllMovement" Output="setOutputs"/>
+        <ECAction Output="cmd.done"/>
+      </ECState>
+      <ECState Comment="" Name="Work" x="3700.0" y="2600.0">
+        <ECAction Algorithm="stopAllMovement" Output="setOutputs"/>
+        <ECAction Output="cmd.done"/>
+      </ECState>
+      <ECState Comment="" Name="Reseted" x="2710.0" y="380.0">
+        <ECAction Output="cmd.reseted"/>
+      </ECState>
+      <ECState Comment="" Name="GotoWork" x="5100.0" y="1200.0">
+        <ECAction Algorithm="moveWork" Output="setOutputs"/>
+        <ECAction Algorithm="setMovementStartTime" Output="timer.START"/>
+      </ECState>
+      <ECState Comment="" Name="WorkMovementStarted" x="5100.0" y="1695.0">
+        <ECAction Algorithm="setMovementTime" Output="timer.START"/>
+      </ECState>
+      <ECState Comment="" Name="GotoHome" x="3000.0" y="2000.0">
+        <ECAction Algorithm="moveWork" Output="setOutputs"/>
+        <ECAction Algorithm="setMovementStartTime" Output="timer.START"/>
+      </ECState>
+      <ECState Comment="" Name="HomeMovementStarted" x="2800.0" y="1600.0">
+        <ECAction Algorithm="setMovementTime" Output="timer.START"/>
+      </ECState>
+      <ECTransition Comment="" Condition="[cmd.reset]" Destination="Reseting" Source="START" x="905.0" y="780.0"/>
+      <ECTransition Comment="" Condition="[cmd.reset]" Destination="Reseting" Source="Error" x="740.0" y="1575.0"/>
+      <ECTransition Comment="" Condition="1" Destination="Home" Source="Reseted" x="3335.0" y="650.0"/>
+      <ECTransition Comment="" Condition="[true = senHome]" Destination="Reseted" Source="Reseting" x="1955.0" y="240.0"/>
+      <ECTransition Comment="" Condition="[timer.TimeOut]" Destination="Error" Source="Reseting" x="1300.0" y="1315.0"/>
+      <ECTransition Comment="" Condition="[false = senHome]" Destination="WorkMovementStarted" Source="GotoWork" x="5340.0" y="1490.0"/>
+      <ECTransition Comment="" Condition="[true = senWork]" Destination="Work" Source="WorkMovementStarted" x="5320.0" y="2280.0"/>
+      <ECTransition Comment="" Condition="[cmd.work]" Destination="GotoWork" Source="Home" x="4155.0" y="1090.0"/>
+      <ECTransition Comment="" Condition="[timer.TimeOut]" Destination="Error" Source="GotoWork" x="1865.0" y="1215.0"/>
+      <ECTransition Comment="" Condition="[timer.TimeOut]" Destination="Error" Source="WorkMovementStarted" x="2300.0" y="950.0"/>
+      <ECTransition Comment="" Condition="[cmd.home]" Destination="GotoHome" Source="Work" x="3460.0" y="2450.0"/>
+      <ECTransition Comment="" Condition="[false = senHome]" Destination="HomeMovementStarted" Source="GotoHome" x="3180.0" y="1915.0"/>
+      <ECTransition Comment="" Condition="[[true = senHome]]" Destination="Home" Source="HomeMovementStarted" x="3475.0" y="1015.0"/>
+      <ECTransition Comment="" Condition="[timer.TimeOut]" Destination="Error" Source="HomeMovementStarted" x="1865.0" y="1755.0"/>
+      <ECTransition Comment="" Condition="[timer.TimeOut]" Destination="Error" Source="GotoHome" x="1920.0" y="2700.0"/>
+    </ECC>
+    <Algorithm Comment="Initialization algorithm" Name="moveHome">
+      <ST Text="moveHome := true;&#10;moveWork := false;&#10;"/>
+    </Algorithm>
+    <Algorithm Comment="Normally executed algorithm" Name="moveWork">
+      <ST Text="moveHome := false;&#10;moveWork := true;&#10;"/>
+    </Algorithm>
+    <Algorithm Comment="new algorithm" Name="setMovementStartTime">
+      <ST Text="&#10;timer.DT := moveStartTime;&#10;&#10;"/>
+    </Algorithm>
+    <Algorithm Comment="new algorithm" Name="setMovementTime">
+      <ST Text="timer.DT := moveCompletionTime;&#10;"/>
+    </Algorithm>
+    <Algorithm Comment="new algorithm" Name="stopAllMovement">
+      <ST Text="moveHome := false;&#10;moveWork := false;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

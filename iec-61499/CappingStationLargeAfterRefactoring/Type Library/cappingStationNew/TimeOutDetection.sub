@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SubAppType Name="TimeOutDetection" Comment="Stand-In for the lost TimeOutDetection functionblock">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Organization="Unknown" Version="0.0" Author="Unknown" Date="2021-07-05">
+	</VersionInfo>
+	<SubAppInterfaceList>
+		<SubAppEventInputs>
+			<SubAppEvent Name="INIT" Type="Event" Comment="Initialization Request">
+			</SubAppEvent>
+			<SubAppEvent Name="REQ" Type="Event" Comment="Normal Execution Request">
+			</SubAppEvent>
+			<SubAppEvent Name="EI1" Type="Event" Comment="">
+			</SubAppEvent>
+			<SubAppEvent Name="EI2" Type="Event" Comment="">
+			</SubAppEvent>
+		</SubAppEventInputs>
+		<SubAppEventOutputs>
+			<SubAppEvent Name="INITO" Type="Event" Comment="Initialization Confirm">
+			</SubAppEvent>
+			<SubAppEvent Name="CNF" Type="Event" Comment="Execution Confirmation">
+			</SubAppEvent>
+			<SubAppEvent Name="ERROR" Type="Event" Comment="">
+			</SubAppEvent>
+		</SubAppEventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Input event qualifier"/>
+		</InputVars>
+		<Plugs>
+			<AdapterDeclaration Name="PLUG1" Type="ATimeOut" Comment=""/>
+		</Plugs>
+	</SubAppInterfaceList>
+	<SubAppNetwork>
+		<FB Name="EH_TimeOut" Type="EH_TimeOut" Comment="" x="400.0" y="-600.0">
+		</FB>
+		<EventConnections>
+			<Connection Source="INIT" Destination="EH_TimeOut.INIT" Comment="" dx1="700.0"/>
+			<Connection Source="EI1" Destination="EH_TimeOut.EI1" Comment="" dx1="700.0"/>
+			<Connection Source="EI2" Destination="EH_TimeOut.EI2" Comment="" dx1="700.0"/>
+			<Connection Source="EH_TimeOut.ERROR" Destination="ERROR" Comment="" dx1="950.0"/>
+			<Connection Source="EH_TimeOut.INITO" Destination="INITO" Comment="" dx1="950.0"/>
+		</EventConnections>
+		<AdapterConnections>
+			<Connection Source="EH_TimeOut.TimeOut" Destination="PLUG1" Comment="" dx1="950.0"/>
+		</AdapterConnections>
+	</SubAppNetwork>
+</SubAppType>
