@@ -36,15 +36,15 @@ https://github.com/user-attachments/assets/04556ef6-e9ac-42f7-8da4-2878865368e5
 
 https://github.com/user-attachments/assets/ec499dc8-76b7-4dec-a55b-b749a7c06233
 
-## Additional Features of 4diac (no video)
-* Move Types to different packages
-* SafeDeletion of FunctionBlockType
-* Rename Member of Structured Data Type
-* Update InitialValue of Structured Data Type
-* Replace Pin with Structured Type
-* Create new Hierchacical element from existing network
-* remove Hierachy Level
-* Extract Adapter
-* Translate to Type
+## Additional Features of Eclipse 4diac (without video)
+* Moving types to different packages
+* Safely deleting Function Block type
+* Renaming member of Structured Data Type
+* Updating initial value of Structured Data Type
+* Replacing pin with Structured Type
+* Creating new hierarchical element from existing network
+* Removing hierachy level
+* Extracting adapter
+* Translating model fragments to types
 
 
