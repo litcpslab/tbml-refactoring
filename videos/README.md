@@ -24,7 +24,7 @@ The initial application was scaled up from 91 block instances to 28483 to demons
 
 # Additional Refactoring Operations implemented in Eclipse 4diac
 
-## Move Element through hierarchy
+## Moving Block through Hierachy
 
 https://github.com/user-attachments/assets/519f5544-cc95-4b31-aa31-9a5693c88078
 
