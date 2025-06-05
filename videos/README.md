@@ -22,13 +22,23 @@ https://github.com/user-attachments/assets/555d0991-91a9-4e32-a120-bbbd0d2ff387
 
 # Additional Refactoring Operations implemented in Eclipse 4diac
 
+## Move Element through hierarchy
 
+https://github.com/user-attachments/assets/519f5544-cc95-4b31-aa31-9a5693c88078
 
+## Rename Function Block Type and Rename Interface Pin
 
+https://github.com/user-attachments/assets/04556ef6-e9ac-42f7-8da4-2878865368e5
 
 ## Safe Deletion of a DataType
 
-
-
 https://github.com/user-attachments/assets/ec499dc8-76b7-4dec-a55b-b749a7c06233
+
+## Additional Features of 4diac (no video)
+* Move Types to different packages
+* SafeDeletion of FunctionBlockType
+* Rename Member of Structured Data Type
+* Update InitialValue of Structured Data Type
+
+
 
