@@ -1,6 +1,7 @@
 # Merge Connection Refactoring in Eclipse 4diac
 
-The section shows the application in project iec-61499/CappingStationLarge
+This table shows the quantification of an example oriented on a real-world plant manufacturing system.
+The initial application was scaled up from 91 block instances to 28483 to demonstrate functionality on larger systems too.
 
 | Status                                  | Number of Connections | Number of Block Instances | Affected block Instances by Refactoring                                           | Reconnections required (Required steps for manual resolution) | Mux/Demux Insertions required  (Required steps for manual resolution) | Execution time (OS overhead, etc., not considereed). This time is not exact. | Errors/Inconsistencies |
 |-----------------------------------------|-----------------------|---------------------------|------------------------------------------------------------------------------------|------------------------|---------------------------|-----------------------------------------------------------------------------|-----------------------|
