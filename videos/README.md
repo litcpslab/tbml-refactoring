@@ -2,12 +2,11 @@
 
 The section shows the application in project iec-61499/CappingStationLarge
 
-| Status                                  | Number of Connections | Number of Block Instances | Affected block Instances by Refactoring                                           | Execution time (OS overhead, etc., not considereed). This time is not exact. | Errors/Inconsistencies |
-|-----------------------------------------|-----------------------|---------------------------|------------------------------------------------------------------------------------|--------------------------------------------------------------------------|-----------------------|
-| Before Refactoring                      | 51019                 | 25979                     | 4382 (Instances of SkillConfig) + 15337 (Instances of SkillFB)                     |                                                                          | 0                     |
-| After Refactoring                       | 45698                 | 28483                     | 4382 (Instances of SkillConfig) + 15337 (Instances of SkillFB)                     | ~7.32 sec                                                                   | 0                     |
-| Refactoring without conflict resolution | 42881                 | 25979                     | 4382 (Instances of SkillConfig) + 15337 (Instances of SkillFB)                      | ~6.04 sec                                                                   | 9390                  |
-
+| Status                                  | Number of Connections | Number of Block Instances | Affected block Instances by Refactoring                                           | Reconnections required | Mux/Demux Insertions required | Execution time (OS overhead, etc., not considereed). This time is not exact. | Errors/Inconsistencies |
+|-----------------------------------------|-----------------------|---------------------------|------------------------------------------------------------------------------------|------------------------|---------------------------|-----------------------------------------------------------------------------|-----------------------|
+| Before Refactoring                      | 51019                 | 25979                     | 4382 (Instances of SkillConfig) + 15337 (Instances of SkillFB)                     |                        |                           |                                                                             | 0                     |
+| After Refactoring                       | 45698                 | 28483                     | 4382 (Instances of SkillConfig) + 15337 (Instances of SkillFB)                     |             12740           |            2504               | ~7.32 sec                                                                   | 0                     |
+| Refactoring without conflict resolution | 42881                 | 25979                     | 4382 (Instances of SkillConfig) + 15337 (Instances of SkillFB)                     |            3422            |                           | ~6.04 sec                                                                   | 9390                  |
 
 
 ## Merge Connection Refactoring with Conflict Resolution
