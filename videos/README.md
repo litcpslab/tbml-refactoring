@@ -47,4 +47,8 @@ https://github.com/user-attachments/assets/ec499dc8-76b7-4dec-a55b-b749a7c06233
 * Extracting adapter
 * Translating model fragments to types
 
+# Merge Connection Refactoring in Matlab Simulink
+
+https://github.com/user-attachments/assets/b686831b-e79b-4db0-91a9-82b07e684ef0
+
 
